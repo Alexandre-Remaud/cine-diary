@@ -22,12 +22,12 @@ export default defineConfigWithVueTs(
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
-  
+
   {
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],
   },
-  
+
   {
     ...pluginCypress.configs.recommended,
     files: [
@@ -36,4 +36,12 @@ export default defineConfigWithVueTs(
     ],
   },
   skipFormatting,
+  {
+    languageOptions: {
+      globals: {
+        node: true,
+        es6: true,
+      },
+    },
+  },
 )
