@@ -1,16 +1,18 @@
 import express from 'express'
 import authMiddleware from '@middlewares/authMiddleware'
+import { validate } from '@middlewares/validate'
 import { login, refresh, register, getMe, logout } from '@controllers/authController'
+import { loginSchema, logoutSchema, refreshSchema, registerSchema } from '@shared-types/AuthSchemas'
 
 const router = express.Router()
 
-router.post('/register', register)
+router.post('/register', validate(registerSchema), register)
 
-router.post('/login', login)
+router.post('/login', validate(loginSchema), login)
 
-router.post('/logout', logout)
+router.post('/logout', validate(logoutSchema), logout)
 
-router.post('/refresh', refresh)
+router.post('/refresh', validate(refreshSchema), refresh)
 
 router.get('/me', authMiddleware, getMe)
 

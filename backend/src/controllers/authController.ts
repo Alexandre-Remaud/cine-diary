@@ -1,13 +1,17 @@
 import { Request, Response, NextFunction } from 'express'
 import { loginUser, logoutUser, refreshAccessToken, registerUser } from '@services/authService'
-import { registerSchema, loginSchema } from '@shared-types/AuthSchemas'
+import { RegisterInput, LoginInput, TokenInput } from '@shared-types/AuthSchemas'
 import AppError from '@utils/AppError'
 import User from '@models/User'
 import AuthenticatedRequest from '@shared-types/AuthMiddleware'
 
-export const register = async (req: Request, res: Response, next: NextFunction) => {
+export const register = async (
+  req: Request<{}, {}, RegisterInput>,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    const { email, password } = registerSchema.parse(req.body)
+    const { email, password } = req.body
     const { user, tokens } = await registerUser(email, password)
     return res.json({ user, tokens })
   } catch (err) {
@@ -15,9 +19,13 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
   }
 }
 
-export const login = async (req: Request, res: Response, next: NextFunction) => {
+export const login = async (
+  req: Request<{}, {}, LoginInput>,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    const { email, password } = loginSchema.parse(req.body)
+    const { email, password } = req.body
     const { user, tokens } = await loginUser(email, password)
     return res.json({ user, tokens })
   } catch (err) {
@@ -25,12 +33,13 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
-export const logout = async (req: Request, res: Response, next: NextFunction) => {
+export const logout = async (
+  req: Request<{}, {}, TokenInput>,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { userId, refreshToken } = req.body
-    if (!userId || !refreshToken) {
-      return next(new AppError('userId et refreshToken requis', 400))
-    }
     const { message } = await logoutUser(userId, refreshToken)
     return res.json({ success: true, message })
   } catch (err) {
@@ -38,14 +47,13 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
-export const refresh = async (req: Request, res: Response, next: NextFunction) => {
-  const { userId, refreshToken } = req.body
-
-  if (!userId || !refreshToken) {
-    return next(new AppError('userId et refreshToken requis', 400))
-  }
-
+export const refresh = async (
+  req: Request<{}, {}, TokenInput>,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
+    const { userId, refreshToken } = req.body
     const { user, tokens } = await refreshAccessToken(
       userId,
       refreshToken,
