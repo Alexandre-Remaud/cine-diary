@@ -18,7 +18,8 @@
       "@models/*": ["models/*"],
       "@services/*": ["services/*"],
       "@utils/*": ["utils/*"],
-      "@routes/*": ["routes/*"]
+      "@routes/*": ["routes/*"],
+      "@controllers/*": ["controllers/*"]
     },
     "types": ["node"],
     "typeRoots": ["./node_modules/@types", "./src/types"]

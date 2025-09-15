@@ -35,8 +35,10 @@ export const refreshAccessToken = async (
 
   return {
     user: { id: user._id.toString(), email: user.email },
-    accessToken,
-    refreshToken: newRefreshToken,
+    tokens: {
+      accessToken,
+      refreshToken: newRefreshToken,
+    },
   }
 }
 
@@ -46,5 +48,8 @@ async function issueTokens(user: any): Promise<AuthResponse> {
   await user.save()
 
   const accessToken = generateAccessToken(user._id.toString())
-  return { user: { id: user._id.toString(), email: user.email }, accessToken, refreshToken }
+  return {
+    user: { id: user._id.toString(), email: user.email },
+    tokens: { accessToken, refreshToken },
+  }
 }
