@@ -1,6 +1,7 @@
 import express from 'express'
 import authMiddleware from '@middlewares/authMiddleware'
 import { validate } from '@middlewares/validate'
+import { authorize } from '@middlewares/authorize'
 import { login, refresh, register, getMe, logout, logoutAll } from '@controllers/authController'
 import {
   loginSchema,
@@ -16,9 +17,15 @@ router.post('/register', validate(registerSchema), register)
 
 router.post('/login', validate(loginSchema), login)
 
-router.post('/logout', validate(logoutSchema), logout)
+router.post('/logout', authMiddleware, authorize(['user']), validate(logoutSchema), logout)
 
-router.post('/logout-all', validate(logoutAllSchema), logoutAll)
+router.post(
+  '/logout-all',
+  authMiddleware,
+  authorize(['user']),
+  validate(logoutAllSchema),
+  logoutAll,
+)
 
 router.post('/refresh', validate(refreshSchema), refresh)
 

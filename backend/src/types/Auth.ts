@@ -1,3 +1,5 @@
+import { Role } from '@constants/Roles'
+
 export type PublicUser = {
   id: string
   email: string
@@ -17,4 +19,4 @@ export type AuthResponse = {
   }
 }
 
-export type JwtPayload = { id: string }
+export type JwtPayload = { id: string; role: Role }

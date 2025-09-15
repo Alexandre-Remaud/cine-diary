@@ -6,7 +6,7 @@ import {
   registerUser,
   logoutAllUser,
 } from '@services/authService'
-import { RegisterInput, LoginInput, TokenInput, LogoutAllInput } from '@shared-types/AuthSchemas'
+import { RegisterInput, LoginInput, RefreshInput } from '@shared-types/AuthSchemas'
 import AppError from '@utils/AppError'
 import User from '@models/User'
 import AuthenticatedRequest from '@shared-types/AuthMiddleware'
@@ -39,28 +39,21 @@ export const login = async (
   }
 }
 
-export const logout = async (
-  req: Request<{}, {}, TokenInput>,
-  res: Response,
-  next: NextFunction,
-) => {
+export const logout = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const { userId, refreshToken } = req.body
-    const { message } = await logoutUser(userId, refreshToken)
+    if (!req.user) return next(new AppError('Non authentifié', 401))
+    const { refreshToken } = req.body
+    const { message } = await logoutUser(req.user.id, refreshToken)
     return res.json({ success: true, message })
   } catch (err) {
     next(err)
   }
 }
 
-export const logoutAll = async (
-  req: Request<{}, {}, LogoutAllInput>,
-  res: Response,
-  next: NextFunction,
-) => {
+export const logoutAll = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const { userId } = req.body
-    const { message } = await logoutAllUser(userId)
+    if (!req.user) return next(new AppError('Non authentifié', 401))
+    const { message } = await logoutAllUser(req.user.id)
     return res.json({ success: true, message })
   } catch (err) {
     next(err)
@@ -68,7 +61,7 @@ export const logoutAll = async (
 }
 
 export const refresh = async (
-  req: Request<{}, {}, TokenInput>,
+  req: Request<{}, {}, RefreshInput>,
   res: Response,
   next: NextFunction,
 ) => {
@@ -87,10 +80,8 @@ export const refresh = async (
 
 export const getMe = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const user = await User.findById(req.userId)
-    if (!user) {
-      return next(new AppError('Utilisateur non trouvé', 404))
-    }
+    const user = await User.findById(req?.user?.id)
+    if (!user) return next(new AppError('Utilisateur non trouvé', 404))
     return res.json({ user, tokens: null })
   } catch (err) {
     next(err)

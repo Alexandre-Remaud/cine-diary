@@ -19,7 +19,7 @@ const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunc
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload
-    req.userId = payload.id
+    req.user = { id: payload.id, role: payload.role }
     next()
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {

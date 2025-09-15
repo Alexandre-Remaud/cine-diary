@@ -9,6 +9,7 @@ export interface RefreshToken {
 export interface User extends Document {
   email: string
   password: string
+  role: 'user' | 'admin'
   refreshTokens: RefreshToken[]
   _id: Types.ObjectId
   createdAt: Date
