@@ -1,8 +1,9 @@
-import { Document } from 'mongoose'
-import IUser from '@shared-types/User'
-
-export type LoginResponse = {
-  user: Omit<IUser, 'password'> & Document
+export type PublicUser = {
+  id: string
+  email: string
+}
+export type AuthResponse = {
+  user: PublicUser
   token: string
 }
 
