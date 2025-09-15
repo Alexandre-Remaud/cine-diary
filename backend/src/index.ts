@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000
 
 app.use(cors({ origin: 'http://localhost:5173' }))
 app.use(express.json())
-app.use('/auth', auth)
+app.use('/api/auth', auth)
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok' })
 })
