@@ -33,6 +33,14 @@ export const logoutUser = async (
   return { message: 'Déconnecté avec succès' }
 }
 
+export const logoutAllUser = async (userId: string): Promise<{ message: string }> => {
+  const user = await User.findById(userId)
+  if (!user) throw new AppError('Utilisateur non trouvé', 404)
+  user.refreshTokens = []
+  await user.save()
+  return { message: 'Déconnecté de tous les appareils avec succès' }
+}
+
 export const refreshAccessToken = async (
   userId: string,
   refreshToken: string,

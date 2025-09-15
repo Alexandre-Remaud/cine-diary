@@ -15,9 +15,14 @@ export const tokenSchema = z.object({
   refreshToken: z.string(),
 })
 
+export const logoutAllSchema = z.object({
+  userId: z.string(),
+})
+
 export const refreshSchema = tokenSchema
 export const logoutSchema = tokenSchema
 
 export type TokenInput = z.infer<typeof tokenSchema>
+export type LogoutAllInput = z.infer<typeof logoutAllSchema>
 export type RegisterInput = z.infer<typeof registerSchema>
 export type LoginInput = z.infer<typeof loginSchema>

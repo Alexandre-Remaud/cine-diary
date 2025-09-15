@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
-import { loginUser, logoutUser, refreshAccessToken, registerUser } from '@services/authService'
-import { RegisterInput, LoginInput, TokenInput } from '@shared-types/AuthSchemas'
+import {
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  registerUser,
+  logoutAllUser,
+} from '@services/authService'
+import { RegisterInput, LoginInput, TokenInput, LogoutAllInput } from '@shared-types/AuthSchemas'
 import AppError from '@utils/AppError'
 import User from '@models/User'
 import AuthenticatedRequest from '@shared-types/AuthMiddleware'
@@ -41,6 +47,20 @@ export const logout = async (
   try {
     const { userId, refreshToken } = req.body
     const { message } = await logoutUser(userId, refreshToken)
+    return res.json({ success: true, message })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const logoutAll = async (
+  req: Request<{}, {}, LogoutAllInput>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { userId } = req.body
+    const { message } = await logoutAllUser(userId)
     return res.json({ success: true, message })
   } catch (err) {
     next(err)
