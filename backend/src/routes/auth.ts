@@ -4,16 +4,13 @@ import authMiddleware from '@middlewares/authMiddleware'
 import { loginUser, registerUser } from '@services/authService'
 import User from '@models/User'
 import AppError from '@utils/AppError'
+import { registerSchema, loginSchema } from '@shared-types/AuthSchemas'
 
 const router = express.Router()
 
 router.post('/register', async (req, res, next) => {
-  const { email, password } = req.body
-
-  if (!email || !password) {
-    return next(new AppError('Email et mot de passe requis', 400))
-  }
   try {
+    const { email, password } = registerSchema.parse(req.body)
     const { user, token } = await registerUser(email, password)
     return res.json({ token, user })
   } catch (err) {
@@ -22,13 +19,8 @@ router.post('/register', async (req, res, next) => {
 })
 
 router.post('/login', async (req, res, next) => {
-  const { email, password } = req.body
-
-  if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
-    return next(new AppError('Email et mot de passe requis', 400))
-  }
-
   try {
+    const { email, password } = loginSchema.parse(req.body)
     const { user, token } = await loginUser(email, password)
     return res.json({ token, user })
   } catch (err) {
