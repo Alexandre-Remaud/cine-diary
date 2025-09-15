@@ -22,6 +22,17 @@ export const registerUser = async (email: string, password: string): Promise<Aut
   return issueTokens(user)
 }
 
+export const logoutUser = async (
+  userId: string,
+  refreshToken: string,
+): Promise<{ message: string }> => {
+  const user = await User.findById(userId)
+  if (!user) throw new AppError('Utilisateur non trouvé', 404)
+  user.refreshTokens = user.refreshTokens.filter((rt) => rt.token !== refreshToken)
+  await user.save()
+  return { message: 'Déconnecté avec succès' }
+}
+
 export const refreshAccessToken = async (
   userId: string,
   refreshToken: string,

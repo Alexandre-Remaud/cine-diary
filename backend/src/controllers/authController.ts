@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { loginUser, refreshAccessToken, registerUser } from '@services/authService'
+import { loginUser, logoutUser, refreshAccessToken, registerUser } from '@services/authService'
 import { registerSchema, loginSchema } from '@shared-types/AuthSchemas'
 import AppError from '@utils/AppError'
 import User from '@models/User'
@@ -20,6 +20,19 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const { email, password } = loginSchema.parse(req.body)
     const { user, tokens } = await loginUser(email, password)
     return res.json({ user, tokens })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userId, refreshToken } = req.body
+    if (!userId || !refreshToken) {
+      return next(new AppError('userId et refreshToken requis', 400))
+    }
+    const { message } = await logoutUser(userId, refreshToken)
+    return res.json({ success: true, message })
   } catch (err) {
     next(err)
   }

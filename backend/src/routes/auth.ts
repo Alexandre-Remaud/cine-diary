@@ -1,12 +1,14 @@
 import express from 'express'
 import authMiddleware from '@middlewares/authMiddleware'
-import { login, refresh, register, getMe } from '@controllers/authController'
+import { login, refresh, register, getMe, logout } from '@controllers/authController'
 
 const router = express.Router()
 
 router.post('/register', register)
 
 router.post('/login', login)
+
+router.post('/logout', logout)
 
 router.post('/refresh', refresh)
 
