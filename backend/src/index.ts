@@ -19,7 +19,9 @@ app.get('/api/health', (req: Request, res: Response) => {
 app.use(errorHandler)
 
 mongoose
-  .connect(process.env.MONGODB_URI!)
+  .connect(process.env.MONGODB_URI as string, {
+    dbName: process.env.MONGO_DB_NAME || 'cinediary',
+  })
   .then(() => {
     console.log('Connected to MongoDB')
     app.listen(PORT, () => {

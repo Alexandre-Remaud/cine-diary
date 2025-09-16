@@ -5,11 +5,29 @@ import bcrypt from 'bcryptjs'
 import { generateAccessToken } from '@utils/jwt'
 import { generateRefreshToken, rotateRefreshToken } from '@utils/refreshToken'
 import IUser from '@shared-types/User'
+import LoginAttemptModel from '@models/LoginAttempt'
 
-export const loginUser = async (email: string, password: string): Promise<AuthResponse> => {
+export const loginUser = async (
+  email: string,
+  password: string,
+  ip: string,
+  userAgent?: string,
+): Promise<AuthResponse> => {
   const user = await User.findOne({ email })
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw new AppError('Email ou mot de passe incorrect', 400)
+  if (!user) {
+    throw new AppError('Email incorrect', 401)
+  }
+  const passwordMatch = await bcrypt.compare(password, user.password)
+  const attempt = new LoginAttemptModel({
+    email,
+    ip,
+    userAgent,
+    success: passwordMatch,
+  })
+  await attempt.save()
+
+  if (!passwordMatch) {
+    throw new AppError('Mot de passe incorrect', 401)
   }
   return issueTokens(user)
 }

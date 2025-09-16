@@ -32,7 +32,9 @@ export const login = async (
 ) => {
   try {
     const { email, password } = req.body
-    const { user, tokens } = await loginUser(email, password)
+    const ip = req.ip || 'unknown'
+    const userAgent = req.headers['user-agent']
+    const { user, tokens } = await loginUser(email, password, ip, userAgent)
     return res.json({ user, tokens })
   } catch (err) {
     next(err)
