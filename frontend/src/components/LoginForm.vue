@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
 
@@ -16,11 +16,7 @@ const handleForm = async () => {
     return
   }
   try {
-    const response = await axios.post('/api/auth/login', {
-      email: email.value,
-      password: password.value,
-    })
-    authStore.setToken(response.data.accessToken)
+    authStore.login(email.value, password.value)
     router.push('/')
   } catch (e) {
     const error = e as AxiosError<{ error?: string }>

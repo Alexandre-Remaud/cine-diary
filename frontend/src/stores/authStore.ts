@@ -1,32 +1,34 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import api from '@/plugins/axios'
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({ token: null as string | null, isAuthenticated: false }),
+  state: () => ({
+    token: null as string | null,
+    user: null as { id: string; email: string } | null,
+  }),
+  getters: {
+    isAuthenticated: (state) => !!state.token,
+  },
   actions: {
-    setToken(token: string) {
-      this.token = token
-      this.isAuthenticated = true
-      localStorage.setItem('token', token)
+    async login(email: string, password: string) {
+      const res = await api.post('/auth/login', { email, password }, { withCredentials: true })
+      this.token = res.data.accessToken
+      this.user = res.data.user
     },
-    logout() {
+
+    async fetchMe() {
+      if (!this.token) return
+      const res = await api.get('/auth/me', {
+        headers: { Authorization: `Bearer ${this.token}` },
+        withCredentials: true,
+      })
+      this.user = res.data.user
+    },
+
+    async logout() {
+      await api.post('/auth/logout', {}, { withCredentials: true })
       this.token = null
-      this.isAuthenticated = false
-      localStorage.removeItem('token')
-    },
-    async initAuth() {
-      const token = localStorage.getItem('token')
-      if (token) {
-        try {
-          axios.get('/auth/me', { headers: { Authorization: `Bearer ${token}` } })
-          if (token) {
-            this.token = token
-            this.isAuthenticated = true
-          }
-        } catch (e) {
-          this.logout()
-        }
-      }
+      this.user = null
     },
   },
 })
