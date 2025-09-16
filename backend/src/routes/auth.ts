@@ -2,6 +2,7 @@ import express from 'express'
 import authMiddleware from '@middlewares/authMiddleware'
 import { validate } from '@middlewares/validate'
 import { authorize } from '@middlewares/authorize'
+import { loginRateLimiter } from '@middlewares/loginRateLimiter'
 import { login, refresh, register, getMe, logout, logoutAll } from '@controllers/authController'
 import {
   loginSchema,
@@ -15,7 +16,7 @@ const router = express.Router()
 
 router.post('/register', validate(registerSchema), register)
 
-router.post('/login', validate(loginSchema), login)
+router.post('/login', loginRateLimiter, validate(loginSchema), login)
 
 router.post('/logout', authMiddleware, authorize(['user']), validate(logoutSchema), logout)
 
