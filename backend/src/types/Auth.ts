@@ -14,10 +14,8 @@ export type RefreshTokenPayload = {
 
 export type AuthResponse = {
   user: PublicUser
-  tokens: {
-    accessToken: string
-    refreshToken: RefreshTokenPayload
-  }
+  accessToken: string
+  refreshToken: RefreshTokenPayload
 }
 
 export type JwtPayload = { id: string; role: Role }

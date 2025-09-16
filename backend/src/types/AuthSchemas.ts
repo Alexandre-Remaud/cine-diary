@@ -10,19 +10,5 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'Le mot de passe est requis'),
 })
 
-export const refreshSchema = z.object({
-  userId: z.string(),
-  refreshToken: z.string(),
-})
-
-export const logoutSchema = z.object({
-  refreshToken: z.string(),
-})
-
-export const logoutAllSchema = z.object({
-  userId: z.string(),
-})
-
-export type RefreshInput = z.infer<typeof refreshSchema>
 export type RegisterInput = z.infer<typeof registerSchema>
 export type LoginInput = z.infer<typeof loginSchema>

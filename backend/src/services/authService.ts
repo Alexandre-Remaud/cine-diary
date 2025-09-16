@@ -61,21 +61,20 @@ export const logoutAllUser = async (userId: string): Promise<{ message: string }
 }
 
 export const refreshAccessToken = async (
-  userId: string,
   refreshToken: string,
   userAgent?: string,
 ): Promise<AuthResponse> => {
-  const user = await User.findById(userId)
-  if (!user) throw new AppError('Utilisateur non trouvé', 401)
+  console.log('Looking for refreshToken:', refreshToken)
+  const user = await User.findOne({ 'refreshTokens.token': refreshToken })
+  console.log('User found:', user?._id)
+  if (!user) throw new AppError('Refresh token invalide', 401)
   const newRefreshToken = await rotateRefreshToken(user, refreshToken, userAgent)
   const accessToken = generateAccessToken(user)
 
   return {
     user: toPublicUser(user),
-    tokens: {
-      accessToken,
-      refreshToken: newRefreshToken,
-    },
+    accessToken,
+    refreshToken: newRefreshToken,
   }
 }
 
@@ -87,7 +86,8 @@ async function issueTokens(user: IUser): Promise<AuthResponse> {
   const accessToken = generateAccessToken(user)
   return {
     user: toPublicUser(user),
-    tokens: { accessToken, refreshToken },
+    accessToken,
+    refreshToken,
   }
 }
 

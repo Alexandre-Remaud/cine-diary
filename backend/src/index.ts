@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import auth from '@routes/auth'
 import errorHandler from '@middlewares/errorHandler'
+import cookieParser from 'cookie-parser'
 
 dotenv.config()
 
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 5000
 
 app.use(corsMiddleware)
 app.use(express.json())
+app.use(cookieParser())
 app.use('/api/auth', auth)
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok' })
