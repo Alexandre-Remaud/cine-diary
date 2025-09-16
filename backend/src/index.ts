@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import cors from 'cors'
+import corsMiddleware from './middlewares/corsMiddleware'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import auth from '@routes/auth'
@@ -10,7 +10,7 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
-app.use(cors({ origin: 'http://localhost:5173' }))
+app.use(corsMiddleware)
 app.use(express.json())
 app.use('/api/auth', auth)
 app.get('/api/health', (req: Request, res: Response) => {
