@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import LoginForm from '@/components/LoginForm.vue';
-
+import { RouterView } from 'vue-router'
+import AppNavbar from './components/AppNavbar.vue'
 </script>
 
 <template>
-<LoginForm/>
+  <AppNavbar />
+  <RouterView :key="$route.fullPath" />
 </template>
-
-<style scoped></style>

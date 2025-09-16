@@ -16,11 +16,11 @@ const handleForm = async () => {
     return
   }
   try {
-    const response = await axios.post('/auth/login', {
+    const response = await axios.post('/api/auth/login', {
       email: email.value,
       password: password.value,
     })
-    authStore.setToken(response.data.token)
+    authStore.setToken(response.data.accessToken)
     router.push('/')
   } catch (e) {
     const error = e as AxiosError<{ error?: string }>
