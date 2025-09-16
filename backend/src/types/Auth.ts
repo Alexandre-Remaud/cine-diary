@@ -8,6 +8,7 @@ export type PublicUser = {
 export type RefreshTokenPayload = {
   token: string
   createdAt: Date
+  expiresAt: Date
   userAgent?: string
 }
 

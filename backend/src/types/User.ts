@@ -3,6 +3,7 @@ import { Types, Document } from 'mongoose'
 export interface RefreshToken {
   token: string
   createdAt: Date
+  expiresAt: Date
   userAgent?: string
 }
 
