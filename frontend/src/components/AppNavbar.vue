@@ -10,7 +10,7 @@ const isOpen = ref(false)
 
 const handleLogout = () => {
   authStore.logout()
-  router.push('/login')
+  router.push('/')
   isOpen.value = false
 }
 </script>
@@ -22,19 +22,24 @@ const handleLogout = () => {
         <RouterLink to="/" class="text-xl font-bold">CineDiary</RouterLink>
 
         <div class="hidden md:flex space-x-6">
-          <RouterLink to="/" class="hover:text-blue-400">Home</RouterLink>
           <template v-if="!authStore.isAuthenticated">
-            <RouterLink to="/login" class="hover:text-blue-400">Login</RouterLink>
-            <RouterLink to="/register" class="hover:text-blue-400">Register</RouterLink>
+            <RouterLink to="/login" class="hover:text-blue-400">Se connecter</RouterLink>
           </template>
           <template v-else>
-            <button @click="handleLogout" class="hover:text-red-400">Logout</button>
+            <button @click="handleLogout" class="hover:text-red-400">Se déconnecter</button>
+            <span>connecté en tant que {{ authStore.user?.email }}</span>
           </template>
         </div>
 
         <div class="md:hidden">
           <button @click="isOpen = !isOpen" class="focus:outline-none">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              aria-label="Menu"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -51,14 +56,13 @@ const handleLogout = () => {
       <RouterLink @click="isOpen = false" to="/" class="block hover:text-blue-400">Home</RouterLink>
       <template v-if="!authStore.isAuthenticated">
         <RouterLink @click="isOpen = false" to="/login" class="block hover:text-blue-400"
-          >Login</RouterLink
-        >
-        <RouterLink @click="isOpen = false" to="/register" class="block hover:text-blue-400"
-          >Register</RouterLink
+          >Se connecter</RouterLink
         >
       </template>
       <template v-else>
-        <button @click="handleLogout" class="block hover:text-red-400">Logout</button>
+        <button @click="handleLogout" aria-label="Logout" class="block hover:text-red-400">
+          Se déconnecter
+        </button>
       </template>
     </div>
   </nav>

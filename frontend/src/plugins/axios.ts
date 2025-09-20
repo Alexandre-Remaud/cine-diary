@@ -6,6 +6,18 @@ const api = axios.create({
   withCredentials: true,
 })
 
+let isRefreshing = false
+let refreshSubscribers: ((token: string) => void)[] = []
+
+function onRrefreshed(token: string) {
+  refreshSubscribers.forEach((callback) => callback(token))
+  refreshSubscribers = []
+}
+
+function addSubscriber(callback: (token: string) => void) {
+  refreshSubscribers.push(callback)
+}
+
 api.interceptors.request.use((config) => {
   const authStore = useAuthStore()
   if (authStore.token) {
@@ -18,21 +30,35 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const authStore = useAuthStore()
+    const originalRequest = error.config
 
-    if (error.response?.status === 401 && !error.config._retry) {
-      error.config._retry = true
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise((resolve) => {
+          addSubscriber((token: string) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`
+            resolve(api(originalRequest))
+          })
+        })
+      }
+
+      originalRequest._retry = true
+      isRefreshing = true
+
       try {
-        const res = await axios.post(
-          'http://localhost:5000/api/auth/refresh',
-          {},
-          { withCredentials: true },
-        )
-        authStore.token = res.data.accessToken
-        error.config.headers.Authorization = `Bearer ${authStore.token}`
-        return api(error.config)
+        const res = await api.post('/auth/refresh', {})
+        const newToken = res.data.accessToken
+        authStore.token = newToken
+
+        onRrefreshed(newToken)
+
+        originalRequest.headers.Authorization = `Bearer ${newToken}`
+        return api(originalRequest)
       } catch (refreshError) {
-        authStore.logout()
+        await authStore.logout()
         return Promise.reject(refreshError)
+      } finally {
+        isRefreshing = false
       }
     }
 

@@ -1,12 +1,11 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import express, { Request, Response } from 'express'
 import corsMiddleware from './middlewares/corsMiddleware'
-import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import auth from '@routes/auth'
 import errorHandler from '@middlewares/errorHandler'
 import cookieParser from 'cookie-parser'
-
-dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 5000

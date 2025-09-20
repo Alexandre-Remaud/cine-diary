@@ -26,10 +26,7 @@ const handleForm = async () => {
 </script>
 
 <template>
-  <form
-    class="flex flex-col items-center justify-center min-h-screen gap-4"
-    @submit.prevent="handleForm"
-  >
+  <form class="flex flex-col w-full max-w-md gap-4 px-4" @submit.prevent="handleForm">
     <div class="w-full max-w-md mb-2 space-y-2">
       <label class="font-semibold" for="email">Email</label>
       <input
@@ -61,6 +58,11 @@ const handleForm = async () => {
     </button>
     <p v-if="errorMessage" class="text-red-500">{{ errorMessage }}</p>
   </form>
+  <div class="p-2">
+    <RouterLink to="/register" class="hover:text-blue-400"
+      >Pas encore inscrit ? → S’inscrire</RouterLink
+    >
+  </div>
 </template>
 
 <style scoped></style>

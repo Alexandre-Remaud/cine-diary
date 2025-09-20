@@ -3,5 +3,7 @@ import RegisterForm from '@/components/RegisterForm.vue'
 </script>
 
 <template>
-  <RegisterForm />
+  <div class="flex flex-1 flex-col items-center justify-center">
+    <RegisterForm />
+  </div>
 </template>

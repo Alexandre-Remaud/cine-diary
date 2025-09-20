@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>Bienvenue</div>
+  <div class="flex flex-1 flex-col items-center justify-center">Bienvenue</div>
 </template>

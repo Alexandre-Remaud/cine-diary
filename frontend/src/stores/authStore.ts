@@ -10,10 +10,29 @@ export const useAuthStore = defineStore('auth', {
     isAuthenticated: (state) => !!state.token,
   },
   actions: {
+    async initAuth() {
+      this.token = localStorage.getItem('token')
+      if (this.token) {
+        try {
+          await this.fetchMe()
+        } catch {
+          await this.logout()
+        }
+      }
+    },
+
     async login(email: string, password: string) {
       const res = await api.post('/auth/login', { email, password }, { withCredentials: true })
       this.token = res.data.accessToken
       this.user = res.data.user
+      localStorage.setItem('token', res.data.accessToken)
+    },
+
+    async register(email: string, password: string) {
+      const res = await api.post('/auth/register', { email, password })
+      this.token = res.data.accessToken
+      this.user = res.data.user
+      localStorage.setItem('token', res.data.accessToken)
     },
 
     async fetchMe() {
@@ -29,6 +48,7 @@ export const useAuthStore = defineStore('auth', {
       await api.post('/auth/logout', {}, { withCredentials: true })
       this.token = null
       this.user = null
+      localStorage.removeItem('token')
     },
   },
 })
