@@ -1,17 +1,28 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/authStore'
+import { UserIcon, LogOutIcon, LogInIcon } from '@/icons/icons'
+import { useUiStore } from '@/stores/uiStore'
 
 const authStore = useAuthStore()
+const uiStore = useUiStore()
 const router = useRouter()
 
+const { isLoading } = storeToRefs(uiStore)
 const isOpen = ref(false)
 
 const handleLogout = () => {
-  authStore.logout()
-  router.push('/')
-  isOpen.value = false
+  uiStore.startLoading()
+  try {
+    authStore.logout()
+    uiStore.addToast('info', 'Déconnexion réussie 👋')
+    router.push('/')
+  } finally {
+    uiStore.stopLoading()
+    isOpen.value = false
+  }
 }
 </script>
 
@@ -21,16 +32,27 @@ const handleLogout = () => {
       <div class="flex items-center justify-between h-16">
         <RouterLink to="/" class="text-xl font-bold">CineDiary</RouterLink>
 
-        <div class="hidden md:flex space-x-6">
+        <!-- Desktop -->
+        <div class="hidden md:flex space-x-6 items-center">
           <template v-if="!authStore.isAuthenticated">
-            <RouterLink to="/login" class="hover:text-blue-400">Se connecter</RouterLink>
+            <RouterLink to="/login" class="flex items-center space-x-2 hover:text-blue-400">
+              <LogInIcon class="w-5 h-5" />
+              <span>Se connecter</span>
+            </RouterLink>
           </template>
           <template v-else>
-            <button @click="handleLogout" class="hover:text-red-400">Se déconnecter</button>
-            <span>connecté en tant que {{ authStore.user?.email }}</span>
+            <RouterLink to="/profile" class="flex items-center space-x-2 hover:text-blue-400">
+              <span>{{ authStore.user?.email }}</span>
+              <UserIcon class="w-5 h-5" />
+            </RouterLink>
+            <button @click="handleLogout" class="flex items-center space-x-2 hover:text-red-400">
+              <LogOutIcon class="w-5 h-5" />
+              <span>Se déconnecter</span>
+            </button>
           </template>
         </div>
 
+        <!-- Mobile toggle -->
         <div class="md:hidden">
           <button @click="isOpen = !isOpen" class="focus:outline-none">
             <svg
@@ -52,16 +74,36 @@ const handleLogout = () => {
       </div>
     </div>
 
+    <!-- Mobile -->
     <div v-if="isOpen" class="md:hidden px-4 pb-4 space-y-2 bg-gray-800">
       <RouterLink @click="isOpen = false" to="/" class="block hover:text-blue-400">Home</RouterLink>
       <template v-if="!authStore.isAuthenticated">
-        <RouterLink @click="isOpen = false" to="/login" class="block hover:text-blue-400"
-          >Se connecter</RouterLink
+        <RouterLink
+          @click="isOpen = false"
+          to="/login"
+          class="flex items-center space-x-2 hover:text-blue-400"
         >
+          <LogInIcon class="w-5 h-5" />
+          <span>Se connecter</span>
+        </RouterLink>
       </template>
       <template v-else>
-        <button @click="handleLogout" aria-label="Logout" class="block hover:text-red-400">
-          Se déconnecter
+        <RouterLink
+          @click="isOpen = false"
+          to="/profile"
+          class="flex items-center space-x-2 hover:text-blue-400"
+        >
+          <span>{{ authStore.user?.email }}</span>
+          <UserIcon class="w-5 h-5" />
+        </RouterLink>
+        <button
+          @click="handleLogout"
+          aria-label="Logout"
+          class="flex items-center space-x-2 hover:text-red-400"
+        >
+          <LogOutIcon class="w-5 h-5" />
+          <span v-if="isLoading">Déconneion...</span>
+          <span v-else>Se déconnecter</span>
         </button>
       </template>
     </div>
