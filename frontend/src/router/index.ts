@@ -25,6 +25,16 @@ const routes = [
     component: () => import('@/views/ProfileView.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: () => import('@/views/NotFound.vue'),
+  },
+  {
+    path: '/403',
+    name: 'Forbidden',
+    component: () => import('@/views/ForbiddenView.vue'),
+  },
 ]
 
 const router = createRouter({

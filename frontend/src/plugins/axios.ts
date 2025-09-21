@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 import { useUiStore } from '@/stores/uiStore'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
   withCredentials: true,
@@ -65,17 +67,26 @@ api.interceptors.response.use(
       }
     }
 
+    const statusMessages: Record<number, string> = {
+      400: 'Requête invalide',
+      403: 'Accès refusé',
+      404: 'Ressource introuvable',
+      429: 'Trop de requête',
+    }
+
     if (error.response) {
       const status = error.response.status
       const msg =
         error.response.data?.message ||
+        statusMessages[status] ||
         (status >= 500 ? 'Erreur serveur, veuillez réessayer plus tard' : 'Une erreur est survenue')
 
-      uiStore.addToast('error', msg)
-    } else {
-      uiStore.addToast('error', 'Impossible de contacter le serveur')
-    }
+      uiStore.addToast(status === 429 ? 'warning' : 'error', msg)
 
+      if (status === 403) {
+        router.push('/403')
+      }
+    }
     return Promise.reject(error)
   },
 )

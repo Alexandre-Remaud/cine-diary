@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export type ToastType = 'success' | 'error' | 'info'
+export type ToastType = 'success' | 'error' | 'info' | 'warning'
 
 export interface Toast {
   id: number
