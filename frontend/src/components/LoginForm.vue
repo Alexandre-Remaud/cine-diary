@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useUiStore } from '@/stores/uiStore'
 import { useRouter } from 'vue-router'
 import { validateEmail, validatePassword } from '@/utils/validation'
+import BaseButton from '@/components/BaseButton.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -75,19 +76,11 @@ const handleForm = async () => {
       />
       <p v-if="errors.password" class="text-red-500 text-sm mt-1">{{ errors.password }}</p>
     </div>
-    <button
-      aria-label="Se connecter"
-      class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:opacity-50"
-      type="submit"
-      :disabled="isLoading"
-    >
-      <span v-if="isLoading">Connexion en cours...</span>
-      <span v-else>Se connecter</span>
-    </button>
+    <BaseButton aria-label="Se connecter" type="submit" :loading="isLoading" variant="primary">
+      Se connecter
+    </BaseButton>
   </form>
   <div class="p-2">
-    <RouterLink to="/register" class="hover:text-blue-400"
-      >Pas encore inscrit ? → S’inscrire</RouterLink
-    >
+    <BaseButton to="/register" variant="text">Pas encore inscrit ? → S’inscrire</BaseButton>
   </div>
 </template>

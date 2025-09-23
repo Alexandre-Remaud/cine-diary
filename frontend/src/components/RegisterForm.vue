@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useUiStore } from '@/stores/uiStore'
 import { useRouter } from 'vue-router'
 import { validateEmail, validatePassword, validatePasswordConfirmation } from '@/utils/validation'
+import BaseButton from '@/components/BaseButton.vue'
 
 const authStore = useAuthStore()
 const uiStore = useUiStore()
@@ -95,14 +96,13 @@ const handleRegister = async () => {
         {{ errors.confirmPassword }}
       </p>
     </div>
-    <button
-      aria-label="Créer un compte"
-      class="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-      type="submit"
-      :disabled="isLoading"
-    >
-      <span v-if="isLoading">Inscription...</span>
-      <span v-else>S'inscrire</span>
-    </button>
+    <BaseButton aria-label="Créer un compte" type="submit" :loading="isLoading" variant="primary">
+      S'inscrire
+    </BaseButton>
   </form>
+  <div class="p-2">
+    <BaseButton to="/login" aria-label="lien pour se connecter" variant="text"
+      >Déjà un compte ? → Se connecter</BaseButton
+    >
+  </div>
 </template>
