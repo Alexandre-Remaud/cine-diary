@@ -7,6 +7,8 @@ import { useUiStore } from '@/stores/uiStore'
 import { useRouter } from 'vue-router'
 import { validateEmail, validatePassword } from '@/utils/validation'
 import BaseButton from '@/components/BaseButton.vue'
+import BaseInput from '@/components/BaseInput.vue'
+import { MailIcon, LockIcon } from '@/icons/icons'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -48,34 +50,25 @@ const handleForm = async () => {
 
 <template>
   <form class="flex flex-col w-full max-w-md gap-4 px-4" @submit.prevent="handleForm" novalidate>
-    <div class="w-full max-w-md mb-2 space-y-2">
-      <label class="font-semibold" for="email">Email</label>
-      <input
-        class="p-2 border rounded w-full max-w-md focus:ring-2 ring-blue-300"
-        type="email"
-        name="email"
-        id="email"
-        v-model="email"
-        placeholder="Entrez votre email"
-        autocomplete="email"
-        :class="{ 'border-red-500': errors.email }"
-      />
-      <p v-if="errors.email" class="text-red-500 text-sm mt-1">{{ errors.email }}</p>
-    </div>
-    <div class="w-full max-w-md mb-2 space-y-2">
-      <label class="font-semibold" for="password">Mot de passe</label>
-      <input
-        class="p-2 border rounded w-full max-w-md focus:ring-2 ring-blue-300"
-        type="password"
-        name="password"
-        id="password"
-        v-model="password"
-        autocomplete="current-password"
-        placeholder="Entrez votre mot de passe"
-        :class="{ 'border-red-500': errors.password }"
-      />
-      <p v-if="errors.password" class="text-red-500 text-sm mt-1">{{ errors.password }}</p>
-    </div>
+    <BaseInput
+      label="Email"
+      type="email"
+      v-model="email"
+      placeholder="Entrez votre email"
+      :icon="MailIcon"
+      :error="errors.email"
+      @blur="errors.email = validateEmail(email)"
+    />
+    <BaseInput
+      label="Mot de passe"
+      type="password"
+      v-model="password"
+      placeholder="Entrez votre mot de passe"
+      :icon="LockIcon"
+      :error="errors.password"
+      @blur="errors.password = validatePassword(password)"
+    />
+
     <BaseButton aria-label="Se connecter" type="submit" :loading="isLoading" variant="primary">
       Se connecter
     </BaseButton>

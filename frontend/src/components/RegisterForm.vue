@@ -7,6 +7,8 @@ import { useUiStore } from '@/stores/uiStore'
 import { useRouter } from 'vue-router'
 import { validateEmail, validatePassword, validatePasswordConfirmation } from '@/utils/validation'
 import BaseButton from '@/components/BaseButton.vue'
+import BaseInput from '@/components/BaseInput.vue'
+import { MailIcon, LockIcon } from '@/icons/icons'
 
 const authStore = useAuthStore()
 const uiStore = useUiStore()
@@ -57,45 +59,35 @@ const handleRegister = async () => {
     novalidate
   >
     <h1 class="text-2xl font-bold mb-4">Créer un compte</h1>
-    <div>
-      <label class="font-semibold" for="email">Email</label>
-      <input
-        id="email"
-        v-model="email"
-        type="email"
-        placeholder="Email"
-        class="w-full p-2 border rounded"
-        :class="{ 'border-red-500': errors.email }"
-      />
-      <p v-if="errors.email" class="text-red-500 text-sm mt-1">{{ errors.email }}</p>
-    </div>
+    <BaseInput
+      label="Email"
+      type="email"
+      v-model="email"
+      placeholder="Entrez votre email"
+      :icon="MailIcon"
+      :error="errors.email"
+      @blur="errors.email = validateEmail(email)"
+    />
 
-    <div>
-      <label class="font-semibold" for="password">Mot de passe</label>
-      <input
-        id="password"
-        v-model="password"
-        type="password"
-        placeholder="Mot de passe"
-        class="w-full p-2 border rounded"
-        :class="{ 'border-red-500': errors.password }"
-      />
-      <p v-if="errors.password" class="text-red-500 text-sm mt-1">{{ errors.password }}</p>
-    </div>
-    <div>
-      <label class="font-semibold" for="confirmPassword">Confirmer le mot de passe</label>
-      <input
-        id="confirmPassword"
-        v-model="confirmPassword"
-        type="password"
-        placeholder="Confirmer le mot de passe"
-        class="w-full p-2 border rounded"
-        :class="{ 'border-red-500': errors.confirmPassword }"
-      />
-      <p v-if="errors.confirmPassword" class="text-red-500 text-sm mt-1">
-        {{ errors.confirmPassword }}
-      </p>
-    </div>
+    <BaseInput
+      label="Mot de passe"
+      type="password"
+      v-model="password"
+      placeholder="Entrez votre mot de passe"
+      :icon="LockIcon"
+      :error="errors.password"
+      @blur="errors.password = validatePassword(password)"
+    />
+
+    <BaseInput
+      label="Confirmer le mot de passe"
+      type="password"
+      v-model="confirmPassword"
+      placeholder="Confirmer le votre mot de passe"
+      :icon="LockIcon"
+      :error="errors.confirmPassword"
+      @blur="errors.confirmPassword = validatePasswordConfirmation(password, confirmPassword)"
+    />
     <BaseButton aria-label="Créer un compte" type="submit" :loading="isLoading" variant="primary">
       S'inscrire
     </BaseButton>
