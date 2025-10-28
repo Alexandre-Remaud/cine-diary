@@ -6,6 +6,7 @@ import { storeToRefs } from 'pinia'
 import { useAuthStore } from './stores/authStore'
 import { useUiStore } from './stores/uiStore'
 import ToastContainer from './components/ToastContainer.vue'
+import AppFooter from './components/AppFooter.vue'
 
 const uiStore = useUiStore()
 const authStore = useAuthStore()
@@ -30,8 +31,9 @@ onMounted(async () => {
       <div class="w-3 h-3 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.2s]"></div>
       <div class="w-3 h-3 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.4s]"></div>
     </main>
-    <main v-else class="flex flex-col flex-1">
+    <main v-else class="flex flex-col flex-1 container mx-auto px-4 py-6">
       <RouterView :key="$route.fullPath" />
     </main>
+    <AppFooter />
   </div>
 </template>

@@ -18,7 +18,13 @@ export const register = async (
 ) => {
   try {
     const { email, password } = req.body
-    const { user, accessToken } = await registerUser(email, password)
+    const { user, accessToken, refreshToken } = await registerUser(email, password)
+    res.cookie('refreshToken', refreshToken.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
     return res.json({ user, accessToken })
   } catch (err) {
     next(err)
@@ -73,9 +79,7 @@ export const logoutAll = async (req: AuthenticatedRequest, res: Response, next: 
 
 export const refresh = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log('cookie:', req.cookies)
     const oldRefreshToken = req.cookies?.refreshToken
-    console.log('refreshToken cookie:', oldRefreshToken)
     if (!oldRefreshToken) throw new AppError('Aucun refresh token fourni', 401)
     const { user, accessToken, refreshToken } = await refreshAccessToken(
       oldRefreshToken,
@@ -107,6 +111,6 @@ function clearRefreshTokenCookie(res: Response) {
   res.clearCookie('refreshToken', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+    sameSite: 'strict',
   })
 }

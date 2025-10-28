@@ -64,9 +64,7 @@ export const refreshAccessToken = async (
   refreshToken: string,
   userAgent?: string,
 ): Promise<AuthResponse> => {
-  console.log('Looking for refreshToken:', refreshToken)
   const user = await User.findOne({ 'refreshTokens.token': refreshToken })
-  console.log('User found:', user?._id)
   if (!user) throw new AppError('Refresh token invalide', 401)
   const newRefreshToken = await rotateRefreshToken(user, refreshToken, userAgent)
   const accessToken = generateAccessToken(user)
