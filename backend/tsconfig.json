@@ -10,7 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "outDir": "./dist",
-    "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
       "@middlewares/*": ["middlewares/*"],
@@ -20,11 +19,12 @@
       "@utils/*": ["utils/*"],
       "@routes/*": ["routes/*"],
       "@controllers/*": ["controllers/*"],
-      "@constants/*": ["constants/*"]
+      "@constants/*": ["constants/*"],
+      "@shared/*": ["../../shared/*"]
     },
     "types": ["node"],
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["src/**/*"],
+    "include": ["src/**/*", "../shared/**/*"],
   "exclude": ["node_modules", "dist"]
 }

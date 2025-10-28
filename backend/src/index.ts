@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 import auth from '@routes/auth'
 import errorHandler from '@middlewares/errorHandler'
 import cookieParser from 'cookie-parser'
+import tmdb from '@routes/tmdb'
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -14,6 +15,7 @@ app.use(corsMiddleware)
 app.use(express.json())
 app.use(cookieParser())
 app.use('/api/auth', auth)
+app.use('/api/tmdb', tmdb)
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok' })
 })
