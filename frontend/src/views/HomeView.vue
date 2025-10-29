@@ -2,6 +2,7 @@
 import { onMounted, computed } from 'vue'
 import { useTmdbStore } from '@/stores/tmdbStore'
 import Rail from '@/components/AppRail.vue'
+import { FilmIcon, StarIcon, TvIcon, CalendarIcon } from '@/icons/icons'
 
 const tmdbStore = useTmdbStore()
 
@@ -10,10 +11,10 @@ onMounted(async () => {
 })
 
 const rails = computed(() => [
-  { title: 'Tendances du jour (Films)', items: tmdbStore.rails.trendingMovies },
-  { title: 'Tendances de la semaine (Séries)', items: tmdbStore.rails.trendingTv },
-  { title: 'Films populaires', items: tmdbStore.rails.topRated },
-  { title: 'Prochainement (Films)', items: tmdbStore.rails.upcoming },
+  { title: `Tendances du jour`, items: tmdbStore.rails.trendingMovies, icon: FilmIcon },
+  { title: 'Séries populaires', items: tmdbStore.rails.trendingTv, icon: TvIcon },
+  { title: 'Films les mieux notés', items: tmdbStore.rails.topRated, icon: StarIcon },
+  { title: 'À venir', items: tmdbStore.rails.upcoming, icon: CalendarIcon },
 ])
 </script>
 
@@ -26,6 +27,7 @@ const rails = computed(() => [
       :items="rail.items"
       :loading="tmdbStore.loading"
       :error="tmdbStore.error"
+      :icon="rail.icon"
     />
   </div>
 </template>

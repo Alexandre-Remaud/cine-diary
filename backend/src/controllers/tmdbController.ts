@@ -11,6 +11,7 @@ import {
 interface DetailParams extends Request {
   params: {id: string}
 }
+
 export const getTrendingMoviesController = async (
   req: Request,
   res: Response,

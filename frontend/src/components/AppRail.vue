@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
+import { type Component } from 'vue'
 
 defineProps<{
   title: string
   items: (TmdbMovie | TmdbTvShow)[]
   loading?: boolean
   error?: string | null
+  icon?: Component
 }>()
 
 const isMovie = (m: TmdbMedia): m is TmdbMovie => 'title' in m
@@ -33,7 +35,7 @@ const getItemRating = (item: TmdbMovie | TmdbTvShow): string => {
 
 <template>
   <div class="space-y-4">
-    <h2 class="text-xl font-bold text-zinc-100">{{ title }}</h2>
+    <h2 class="text-xl font-bold text-zinc-100 flex items-center gap-2"><component v-if="icon" :is="icon" class="w-5 h-5" />{{ title }}</h2>
 
     <div v-if="loading" class="flex h-64 items-center justify-center">
       <div class="text-zinc-400">Chargement...</div>
