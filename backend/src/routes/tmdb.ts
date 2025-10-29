@@ -10,16 +10,18 @@ import {
 
 const router = express.Router()
 
-router.get('/trending-movies', getTrendingMoviesController)
+// movies
+router.get('/movie/trending', getTrendingMoviesController)
+router.get('/movie/now-playing', getNowPlayingMoviesController)
+router.get('/movie/top-rated', getTopRatedMoviesController)
+router.get('/movie/upcoming', getUpcomingMoviesController)
+router.get('/movie/:id', getMovieDetailController)
 
-router.get('/trending-tv', getTrendingTvController)
-
-router.get('/top-rated', getTopRatedMoviesController)
-
-router.get('/upcoming', getUpcomingMoviesController)
-
-router.get('/movie/:id', getMovieDetailController);
-
-router.get('/tv/:id', getTvDetailController);
+// tv shows
+router.get('/tv/trending', getTrendingTvController)
+router.get('/tv/top-rated', getTopRatedTvController)
+router.get('/tv/airing-today', getAiringTodayTvController)
+router.get('/tv/on-the-air', getOnTheAirTvController)
+router.get('/tv/:id', getTvDetailController)
 
 export default router

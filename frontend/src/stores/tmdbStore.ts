@@ -20,22 +20,22 @@ export const useTmdbStore = defineStore('tmdb', {
 
   actions: {
     async getTrendingMovies() {
-      const res = await api.get<TmdbMovie[]>('/tmdb/trending-movies')
+      const res = await api.get<TmdbMovie[]>('/tmdb/movie/trending')
       this.rails.trendingMovies = res.data
     },
 
     async getTrendingTv() {
-      const res = await api.get<TmdbTvShow[]>('/tmdb/trending-tv')
+      const res = await api.get<TmdbTvShow[]>('/tmdb/tv/trending')
       this.rails.trendingTv = res.data
     },
 
     async getTopRatedMovies() {
-      const res = await api.get<TmdbMovie[]>('/tmdb/top-rated')
+      const res = await api.get<TmdbMovie[]>('/tmdb/movie/top-rated')
       this.rails.topRated = res.data
     },
 
     async getUpcomingMovies() {
-      const res = await api.get<TmdbMovie[]>('/tmdb/upcoming')
+      const res = await api.get<TmdbMovie[]>('/tmdb/movie/upcoming')
       this.rails.upcoming = res.data
     },
 
