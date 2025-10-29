@@ -25,19 +25,6 @@ export const getTrendingMoviesController = async (
   }
 }
 
-export const getTrendingTvController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const tv = await getTrendingTv()
-    return res.json(tv)
-  } catch (err) {
-    next(err)
-  }
-}
-
 export const getTopRatedMoviesController = async (
   req: Request,
   res: Response,
@@ -64,6 +51,19 @@ export const getUpcomingMoviesController = async (
   }
 }
 
+export const getNowPlayingMoviesController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const nowPlaying = await getNowPlayingMovies()
+    return res.json(nowPlaying)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const getMovieDetailController = async (
   req: DetailParams,
   res: Response,
@@ -76,6 +76,71 @@ export const getMovieDetailController = async (
   try {
     const movieDetail = await getMovieDetail(id)
     return res.json(movieDetail)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getTrendingTvController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const trendingTv = await getTrendingTv()
+    return res.json(trendingTv)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getTopRatedTvController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const topRatedTv = await getTopRatedTv()
+    return res.json(topRatedTv)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getAiringTodayTvController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const airingTodayTv = await getAiringTodayTv()
+    return res.json(airingTodayTv)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getOnTheAirTvController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const onTheAirTv = await getOnTheAirTvTv()
+    return res.json(onTheAir)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getPopularTvController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const popularTv = await getPopularTv()
+    return res.json(popularTv)
   } catch (err) {
     next(err)
   }

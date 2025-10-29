@@ -2,16 +2,16 @@ import { defineStore } from 'pinia'
 import api from '@/plugins/axios'
 import type { AxiosError } from 'axios'
 import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
-import type { TmdbRails } from '@/types/Tmdb'
+import type { TmdbHomeRails } from '@/types/Tmdb'
 
 export const useTmdbStore = defineStore('tmdb', {
   state: () => ({
-    rails: {
+    homeRails: {
       trendingMovies: [],
       trendingTv: [],
       topRated: [],
       upcoming: [],
-    } as TmdbRails,
+    } as TmdbHomeRails,
     loading: false,
     error: null as string | null,
     currentMedia: null as TmdbMedia | null,
@@ -21,22 +21,22 @@ export const useTmdbStore = defineStore('tmdb', {
   actions: {
     async getTrendingMovies() {
       const res = await api.get<TmdbMovie[]>('/tmdb/movie/trending')
-      this.rails.trendingMovies = res.data
+      this.homeRails.trendingMovies = res.data
     },
 
     async getTrendingTv() {
       const res = await api.get<TmdbTvShow[]>('/tmdb/tv/trending')
-      this.rails.trendingTv = res.data
+      this.homeRails.trendingTv = res.data
     },
 
     async getTopRatedMovies() {
       const res = await api.get<TmdbMovie[]>('/tmdb/movie/top-rated')
-      this.rails.topRated = res.data
+      this.homeRails.topRated = res.data
     },
 
     async getUpcomingMovies() {
       const res = await api.get<TmdbMovie[]>('/tmdb/movie/upcoming')
-      this.rails.upcoming = res.data
+      this.homeRails.upcoming = res.data
     },
 
     async loadHomeRails() {

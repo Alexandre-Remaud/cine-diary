@@ -19,6 +19,7 @@ router.get('/movie/:id', getMovieDetailController)
 
 // tv shows
 router.get('/tv/trending', getTrendingTvController)
+router.get('/tv/popular', getPopularTvController)
 router.get('/tv/top-rated', getTopRatedTvController)
 router.get('/tv/airing-today', getAiringTodayTvController)
 router.get('/tv/on-the-air', getOnTheAirTvController)

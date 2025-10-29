@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
 import { useTmdbStore } from '@/stores/tmdbStore'
-import Rail from '@/components/AppRail.vue'
+import Rail from '@/components/TmdbRail.vue'
 import { FilmIcon, StarIcon, TvIcon, CalendarIcon } from '@/icons/icons'
 
 const tmdbStore = useTmdbStore()
