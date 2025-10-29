@@ -132,7 +132,7 @@ export const getOnTheAirTvController = async (
 ) => {
   try {
     const onTheAirTv = await getOnTheAirTv()
-    return res.json(onTheAir)
+    return res.json(onTheAirTv)
   } catch (err) {
     next(err)
   }

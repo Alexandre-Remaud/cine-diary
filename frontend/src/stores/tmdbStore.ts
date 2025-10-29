@@ -45,6 +45,22 @@ export const useTmdbStore = defineStore('tmdb', {
       const res = await api.get<TmdbTvShow[]>('/tmdb/tv/trending')
       this.rails.trendingTv = res.data
     },
+    async _fetchTopRatedTv() {
+      const res = await api.get<TmdbTvShow[]>('/tmdb/tv/top-rated')
+      this.rails.topRatedTv = res.data
+    },
+    async _fetchAiringTodayTv() {
+      const res = await api.get<TmdbTvShow[]>('/tmdb/tv/airing-today')
+      this.rails.airingTodayTv = res.data
+    },
+    async _fetchOnTheAirTv() {
+      const res = await api.get<TmdbTvShow[]>('/tmdb/tv/on-the-air')
+      this.rails.onTheAirTv = res.data
+    },
+    async _fetchPopularTv() {
+      const res = await api.get<TmdbTvShow[]>('/tmdb/tv/popular')
+      this.rails.popularTv = res.data
+    },
 
     async loadHomeRails() {
       this.loading = true
@@ -73,6 +89,25 @@ export const useTmdbStore = defineStore('tmdb', {
           this._fetchTopRatedMovies(),
           this._fetchUpcomingMovies(),
           this._fetchNowPlayingMovies(),
+        ])
+      } catch (err) {
+        const error = err as AxiosError<{ message?: string }>
+        this.error = error.response?.data?.message || 'Erreur lors du chargement des films'
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async loadTvShowRails() {
+      this.loading = true
+      this.error = null
+      try {
+        await Promise.all([
+          this._fetchTrendingTv(),
+          this._fetchTopRatedTv(),
+          this._fetchAiringTodayTv(),
+          this._fetchOnTheAirTv(),
+          this._fetchPopularTv(),
         ])
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>
@@ -115,5 +150,15 @@ export const useTmdbStore = defineStore('tmdb', {
         {title: 'Films au cinéma', items: this.rails.nowPlayingMovies, icon: PopcornIcon },
       ]
     },
-  },
+
+    tvShowRails(): Pick<TmdbRails, 'trendingTv' | 'topRatedTv' | 'airingTodayTv' | 'onTheAirTv' | 'popularTv'> {
+      return [
+        {title: 'Séries tendances', items: this.rails.trendingTv, icon: FilmIcon},
+        {title: 'Séries les mieux notés', items: this.rails.topRatedTv, icon: StarIcon},
+        {title: 'Diffusé aujourd"hui', items: this.rails.airingTodayTv, icon: CalendarIcon},
+        {title: 'Diffusé cette semaine', items: this.rails.onTheAirTv, icon: PopcornIcon },
+        {title: 'Séries populaires', items: this.rails.popularTv, icon: PopcornIcon },
+      ]
+    },
+  }
 })

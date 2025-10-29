@@ -38,7 +38,7 @@ onBeforeUnmount(() => {
             Films
           </BaseButton>
           <BaseButton
-            to="/tv"
+            to="/tvshow"
             type="button"
             variant="text"
             :icon="TvIcon"
