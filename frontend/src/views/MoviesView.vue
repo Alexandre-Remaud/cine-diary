@@ -5,17 +5,17 @@ import Rail from '@/components/TmdbRail.vue'
 import { storeToRefs } from 'pinia'
 
 const tmdbStore = useTmdbStore()
-const { homeRails, loading, error } = storeToRefs(tmdbStore)
+const { movieRails, loading, error } = storeToRefs(tmdbStore)
 
 onMounted(async () => {
-  await tmdbStore.loadHomeRails()
+  await tmdbStore.loadMovieRails()
 })
 </script>
 
 <template>
   <div class="w-full space-y-8 py-8">
     <Rail
-      v-for="(rail, index) in homeRails"
+      v-for="(rail, index) in movieRails"
       :key="index"
       :title="rail.title"
       :items="rail.items"

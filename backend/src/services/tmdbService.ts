@@ -31,6 +31,11 @@ export const getUpcomingMovies = async (): Promise<TmdbMovie[]> => {
   return data.results
 }
 
+export const getNowPlayingMovies = async (): Promise<TmdbMovie[]> => {
+  const { data } = await tmdbApi.get('/movie/now_playing')
+  return data.results
+}
+
 export const getMovieDetail = async (id: number): Promise<TmdbMovie> => {
   const { data } = await tmdbApi.get(`/movie/${id}`)
   return data

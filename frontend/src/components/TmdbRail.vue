@@ -51,7 +51,7 @@ const getItemRating = (item: TmdbMovie | TmdbTvShow): string => {
         class="group flex-shrink-0"
       >
           <router-link
-            :to="{ name: 'media-detail', params: { id: item.id }, query: { type: isMovie(item) ? 'movie' : 'tv' } }"
+            :to="{ name: 'MediaDetail', params: { id: item.id }, query: { type: isMovie(item) ? 'movie' : 'tv' } }"
             class="block"
           >
             <div class="relative h-[231px] w-[154px] overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900">

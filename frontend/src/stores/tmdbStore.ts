@@ -2,16 +2,22 @@ import { defineStore } from 'pinia'
 import api from '@/plugins/axios'
 import type { AxiosError } from 'axios'
 import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
-import type { TmdbHomeRails } from '@/types/Tmdb'
+import type { TmdbRails } from '@/types/Tmdb.ts'
+import { FilmIcon, StarIcon, TvIcon, CalendarIcon, PopcornIcon } from '@/icons/icons'
 
 export const useTmdbStore = defineStore('tmdb', {
   state: () => ({
-    homeRails: {
+    rails: {
       trendingMovies: [],
+      topRatedMovies: [],
+      upcomingMovies: [],
+      nowPlayingMovies: [],
       trendingTv: [],
-      topRated: [],
-      upcoming: [],
-    } as TmdbHomeRails,
+      airingTodayTv: [],
+      onTheAirTv: [],
+      popularTv: [],
+      topRatedTv: []
+    } as TmdbRails,
     loading: false,
     error: null as string | null,
     currentMedia: null as TmdbMedia | null,
@@ -19,24 +25,25 @@ export const useTmdbStore = defineStore('tmdb', {
   }),
 
   actions: {
-    async getTrendingMovies() {
+    async _fetchTrendingMovies() {
       const res = await api.get<TmdbMovie[]>('/tmdb/movie/trending')
-      this.homeRails.trendingMovies = res.data
+      this.rails.trendingMovies = res.data
     },
-
-    async getTrendingTv() {
-      const res = await api.get<TmdbTvShow[]>('/tmdb/tv/trending')
-      this.homeRails.trendingTv = res.data
-    },
-
-    async getTopRatedMovies() {
+    async _fetchTopRatedMovies() {
       const res = await api.get<TmdbMovie[]>('/tmdb/movie/top-rated')
-      this.homeRails.topRated = res.data
+      this.rails.topRatedMovies = res.data
     },
-
-    async getUpcomingMovies() {
+    async _fetchUpcomingMovies() {
       const res = await api.get<TmdbMovie[]>('/tmdb/movie/upcoming')
-      this.homeRails.upcoming = res.data
+      this.rails.upcomingMovies = res.data
+    },
+    async _fetchNowPlayingMovies() {
+      const res = await api.get<TmdbMovie[]>('/tmdb/movie/now-playing')
+      this.rails.nowPlayingMovies = res.data
+    },
+    async _fetchTrendingTv() {
+      const res = await api.get<TmdbTvShow[]>('/tmdb/tv/trending')
+      this.rails.trendingTv = res.data
     },
 
     async loadHomeRails() {
@@ -44,15 +51,32 @@ export const useTmdbStore = defineStore('tmdb', {
       this.error = null
       try {
         await Promise.all([
-          this.getTrendingMovies(),
-          this.getTrendingTv(),
-          this.getTopRatedMovies(),
-          this.getUpcomingMovies(),
+          this._fetchTrendingMovies(),
+          this._fetchTrendingTv(),
+          this._fetchTopRatedMovies(),
+          this._fetchUpcomingMovies(),
         ])
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>
-        this.error = error.response?.data?.message || 'Error loading rails'
-        console.error(err)
+        this.error = error.response?.data?.message || 'Erreur lors du chargement de l’accueil'
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async loadMovieRails() {
+      this.loading = true
+      this.error = null
+      try {
+        await Promise.all([
+          this._fetchTrendingMovies(),
+          this._fetchTopRatedMovies(),
+          this._fetchUpcomingMovies(),
+          this._fetchNowPlayingMovies(),
+        ])
+      } catch (err) {
+        const error = err as AxiosError<{ message?: string }>
+        this.error = error.response?.data?.message || 'Erreur lors du chargement des films'
       } finally {
         this.loading = false
       }
@@ -60,16 +84,36 @@ export const useTmdbStore = defineStore('tmdb', {
 
     async loadMediaDetail(id: number, type: 'movie' | 'tv') {
       this.loadingDetail = true
+      this.error = null
       try {
         const res = await api.get<TmdbMedia>(`/tmdb/${type}/${id}`)
         this.currentMedia = res.data
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>
-        this.error = error.response?.data?.message || 'Error loading media details'
-        console.error(err)
+        this.error = error.response?.data?.message || 'Erreur lors du chargement du média'
       } finally {
         this.loadingDetail = false
       }
-    }
+    },
+  },
+
+  getters: {
+    homeRails(): Pick<TmdbRails, 'trendingMovies' | 'trendingTv' | 'topRatedMovies' | 'upcomingMovies'> {
+      return [
+        {title: 'Films tendances', items: this.rails.trendingMovies, icon: FilmIcon },
+        {title: 'Séries tendances', items: this.rails.trendingTv, icon: TvIcon},
+        {title: 'Films les mieux notés', items: this.rails.topRatedMovies, icon: StarIcon},
+        {title: 'Film à venir', items: this.rails.upcomingMovies, icon: CalendarIcon},
+      ]
+    },
+
+    movieRails(): Pick<TmdbRails, 'trendingMovies' | 'topRatedMovies' | 'upcomingMovies' | 'nowPlayingMovies'> {
+      return [
+        {title: 'Films tendances', items: this.rails.trendingMovies, icon: FilmIcon},
+        {title: 'Films les mieux notés', items: this.rails.topRatedMovies, icon: StarIcon},
+        {title: 'Films à venir', items: this.rails.upcomingMovies, icon: CalendarIcon},
+        {title: 'Films au cinéma', items: this.rails.nowPlayingMovies, icon: PopcornIcon },
+      ]
+    },
   },
 })

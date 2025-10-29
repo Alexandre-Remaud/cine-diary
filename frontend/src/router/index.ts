@@ -38,12 +38,17 @@ const routes = [
   },
   {
     path: '/media/:id',
-    name: 'media-detail',
+    name: 'MediaDetail',
     component: () => import('@/views/MediaView.vue'),
     props: (route: MediaDetailRoute) => ({
       id: Number(route.params.id),
       type: route.query.type
     })
+  },
+  {
+    path: '/movies',
+    name: 'Movies',
+    component: () => import('@/views/MoviesView.vue')
   }
 ]
 

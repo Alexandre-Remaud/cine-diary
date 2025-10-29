@@ -1,10 +1,15 @@
 import { Request, Response, NextFunction } from 'express'
 import { 
   getTrendingMovies,
-  getTrendingTv,
   getTopRatedMovies,
   getUpcomingMovies,
+  getNowPlayingMovies,
   getMovieDetail,
+  getTrendingTv,
+  getAiringTodayTv,
+  getOnTheAirTv,
+  getPopularTv,
+  getTopRatedTv,
   getTvDetail
 } from '@services/tmdbService'
 
@@ -126,7 +131,7 @@ export const getOnTheAirTvController = async (
   next: NextFunction,
 ) => {
   try {
-    const onTheAirTv = await getOnTheAirTvTv()
+    const onTheAirTv = await getOnTheAirTv()
     return res.json(onTheAir)
   } catch (err) {
     next(err)

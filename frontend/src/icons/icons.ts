@@ -7,5 +7,6 @@ export {
   Film as FilmIcon,
   Tv as TvIcon,
   Star as StarIcon,
-  Calendar as CalendarIcon
+  Calendar as CalendarIcon,
+  Popcorn as PopcornIcon
 } from 'lucide-vue-next'

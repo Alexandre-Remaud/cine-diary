@@ -5,7 +5,12 @@ import {
   getTopRatedMoviesController,
   getUpcomingMoviesController,
   getMovieDetailController,
-  getTvDetailController
+  getTvDetailController,
+  getNowPlayingMoviesController,
+  getPopularTvController,
+  getTopRatedTvController,
+  getAiringTodayTvController,
+  getOnTheAirTvController
 } from '@controllers/tmdbController'
 
 const router = express.Router()
