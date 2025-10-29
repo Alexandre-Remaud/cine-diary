@@ -29,25 +29,25 @@ export const useTmdbStore = defineStore('tmdb', {
       this.rails.trendingTv = res.data
     },
 
-    async getTopRated() {
+    async getTopRatedMovies() {
       const res = await api.get<TmdbMovie[]>('/tmdb/top-rated')
       this.rails.topRated = res.data
     },
 
-    async getUpcoming() {
+    async getUpcomingMovies() {
       const res = await api.get<TmdbMovie[]>('/tmdb/upcoming')
       this.rails.upcoming = res.data
     },
 
-    async loadAllRails() {
+    async loadHomeRails() {
       this.loading = true
       this.error = null
       try {
         await Promise.all([
           this.getTrendingMovies(),
           this.getTrendingTv(),
-          this.getTopRated(),
-          this.getUpcoming(),
+          this.getTopRatedMovies(),
+          this.getUpcomingMovies(),
         ])
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>

@@ -26,12 +26,12 @@ export const getTrendingTv = async (): Promise<TmdbTvShow[]> => {
   return data.results
 }
 
-export const getTopRated = async (): Promise<TmdbMovie[]> => {
+export const getTopRatedMovies = async (): Promise<TmdbMovie[]> => {
   const { data } = await tmdbApi.get('/movie/top_rated')
   return data.results
 }
 
-export const getUpcoming = async (): Promise<TmdbMovie[]> => {
+export const getUpcomingMovies = async (): Promise<TmdbMovie[]> => {
   const { data } = await tmdbApi.get('/movie/upcoming')
   return data.results
 }

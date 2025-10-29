@@ -7,7 +7,7 @@ import { FilmIcon, StarIcon, TvIcon, CalendarIcon } from '@/icons/icons'
 const tmdbStore = useTmdbStore()
 
 onMounted(async () => {
-  await tmdbStore.loadAllRails()
+  await tmdbStore.loadHomeRails()
 })
 
 const rails = computed(() => [

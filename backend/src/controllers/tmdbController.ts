@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import { 
   getTrendingMovies,
   getTrendingTv,
-  getTopRated,
-  getUpcoming,
+  getTopRatedMovies,
+  getUpcomingMovies,
   getMovieDetail,
   getTvDetail
 } from '@services/tmdbService'
@@ -38,26 +38,26 @@ export const getTrendingTvController = async (
   }
 }
 
-export const getTopRatedController = async (
+export const getTopRatedMoviesController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const topRated = await getTopRated()
+    const topRated = await getTopRatedMovies()
     return res.json(topRated)
   } catch (err) {
     next(err)
   }
 }
 
-export const getUpcomingController = async (
+export const getUpcomingMoviesController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const upcoming = await getUpcoming()
+    const upcoming = await getUpcomingMovies()
     return res.json(upcoming)
   } catch (err) {
     next(err)

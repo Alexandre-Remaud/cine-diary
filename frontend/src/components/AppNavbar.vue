@@ -2,6 +2,8 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { RouterLink } from 'vue-router'
 import NavbarLinks from '@/components/NavbarLinks.vue'
+import BaseButton from '@/components/BaseButton.vue'
+import { FilmIcon, TvIcon } from '@/icons/icons'
 
 const isOpen = ref(false)
 const menuRef = ref<HTMLElement | null>(null)
@@ -24,10 +26,27 @@ onBeforeUnmount(() => {
 <template>
   <nav class="bg-gray-900 text-white relative">
     <div class="container mx-auto px-4">
-      <div class="flex items-center justify-between h-16">
+      <div class="flex h-16 items-center justify-between">
         <RouterLink to="/" class="text-xl font-bold">CineDiary</RouterLink>
-
-        <div class="hidden md:flex">
+        <div class="hidden items-center gap-6 md:flex">
+          <BaseButton
+            to="/movies"
+            type="button"
+            variant="text"
+            :icon="FilmIcon"
+          >
+            Films
+          </BaseButton>
+          <BaseButton
+            to="/tv"
+            type="button"
+            variant="text"
+            :icon="TvIcon"
+          >
+            Séries
+          </BaseButton>
+        </div>
+        <div class="flex items-center gap-4 py-2">
           <NavbarLinks />
         </div>
 
