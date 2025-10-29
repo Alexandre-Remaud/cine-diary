@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import type { MediaDetailRoute } from '@shared/types/router'
 
 const routes = [
   {
@@ -35,6 +36,15 @@ const routes = [
     name: 'Forbidden',
     component: () => import('@/views/ForbiddenView.vue'),
   },
+  {
+    path: '/media/:id',
+    name: 'media-detail',
+    component: () => import('@/views/MediaView.vue'),
+    props: (route: MediaDetailRoute) => ({
+      id: Number(route.params.id),
+      type: route.query.type
+    })
+  }
 ]
 
 const router = createRouter({

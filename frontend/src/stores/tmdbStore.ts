@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import api from '@/plugins/axios'
 import type { AxiosError } from 'axios'
-import type { TmdbMovie, TmdbTvShow } from '@shared/types/tmdb.d.ts'
+import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
 import type { TmdbRails } from '@/types/Tmdb'
 
 export const useTmdbStore = defineStore('tmdb', {
@@ -14,6 +14,8 @@ export const useTmdbStore = defineStore('tmdb', {
     } as TmdbRails,
     loading: false,
     error: null as string | null,
+    currentMedia: null as TmdbMedia | null,
+    loadingDetail: false,
   }),
 
   actions: {
@@ -55,5 +57,19 @@ export const useTmdbStore = defineStore('tmdb', {
         this.loading = false
       }
     },
+
+    async loadMediaDetail(id: number, type: 'movie' | 'tv') {
+      this.loadingDetail = true
+      try {
+        const res = await api.get<TmdbMedia>(`/tmdb/${type}/${id}`)
+        this.currentMedia = res.data
+      } catch (err) {
+        const error = err as AxiosError<{ message?: string }>
+        this.error = error.response?.data?.message || 'Error loading media details'
+        console.error(err)
+      } finally {
+        this.loadingDetail = false
+      }
+    }
   },
 })
