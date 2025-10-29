@@ -22,8 +22,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <nav class="bg-gray-900 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <nav class="bg-gray-900 text-white relative">
+    <div class="container mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <RouterLink to="/" class="text-xl font-bold">CineDiary</RouterLink>
 
