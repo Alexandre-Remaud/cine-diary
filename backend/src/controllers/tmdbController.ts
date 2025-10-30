@@ -4,17 +4,17 @@ import {
   getTopRatedMovies,
   getUpcomingMovies,
   getNowPlayingMovies,
-  getMovieDetail,
   getTrendingTv,
   getAiringTodayTv,
   getOnTheAirTv,
   getPopularTv,
   getTopRatedTv,
-  getTvDetail
+  getDetails,
+  getSimilar
 } from '@services/tmdbService'
 
 interface DetailParams extends Request {
-  params: {id: string}
+  params: {id: string, type: string}
 }
 
 export const getTrendingMoviesController = async (
@@ -64,23 +64,6 @@ export const getNowPlayingMoviesController = async (
   try {
     const nowPlaying = await getNowPlayingMovies()
     return res.json(nowPlaying)
-  } catch (err) {
-    next(err)
-  }
-}
-
-export const getMovieDetailController = async (
-  req: DetailParams,
-  res: Response,
-  next: NextFunction,
-) => {
-  const id = Number(req.params.id)
-  if (isNaN(id)) {
-    return res.status(400).json({ message: 'ID film invalide' })
-  }
-  try {
-    const movieDetail = await getMovieDetail(id)
-    return res.json(movieDetail)
   } catch (err) {
     next(err)
   }
@@ -151,18 +134,37 @@ export const getPopularTvController = async (
   }
 }
 
-export const getTvDetailController = async (
+export const getDetailsController = async (
   req: DetailParams,
   res: Response,
   next: NextFunction,
 ) => {
   const id = Number(req.params.id)
+  const type = req.params.type
   if (isNaN(id)) {
-    return res.status(400).json({ message: 'ID TV invalide' })
+    return res.status(400).json({ message: 'ID invalide' })
   }
   try {
-    const tvDetail = await getTvDetail(id)
-    return res.json(tvDetail)
+    const details = await getDetails(id, type)
+    return res.json(details)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getSimilarController = async (
+  req: DetailParams,
+  res: Response,
+  next: NextFunction,
+) => {
+  const id = Number(req.params.id)
+  const type = req.params.type
+  if (isNaN(id)) {
+    return res.status(400).json({ message: 'ID invalide' })
+  }
+  try {
+    const similar = await getSimilar(id, type)
+    return res.json(similar)
   } catch (err) {
     next(err)
   }

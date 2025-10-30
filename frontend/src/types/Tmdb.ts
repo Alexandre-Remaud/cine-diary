@@ -1,4 +1,4 @@
-import type { TmdbMovie, TmdbTvShow } from '@shared/types/tmdb.d.ts'
+import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
 
 export interface TmdbRails {
   trendingMovies: TmdbMovie[]
@@ -9,5 +9,6 @@ export interface TmdbRails {
   airingTodayTv: TmdbTvShow[]
   onTheAirTv: TmdbTvShow[]
   popularTv: TmdbTvShow[]
-  topRatedTv: TmdbTvShow[]
+  topRatedTv: TmdbTvShow[],
+  similar: TmdbMedia[]
 }

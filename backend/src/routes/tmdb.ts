@@ -4,13 +4,13 @@ import {
   getTrendingTvController,
   getTopRatedMoviesController,
   getUpcomingMoviesController,
-  getMovieDetailController,
-  getTvDetailController,
   getNowPlayingMoviesController,
   getPopularTvController,
   getTopRatedTvController,
   getAiringTodayTvController,
-  getOnTheAirTvController
+  getOnTheAirTvController,
+  getDetailsController,
+  getSimilarController
 } from '@controllers/tmdbController'
 
 const router = express.Router()
@@ -20,7 +20,6 @@ router.get('/movie/trending', getTrendingMoviesController)
 router.get('/movie/now-playing', getNowPlayingMoviesController)
 router.get('/movie/top-rated', getTopRatedMoviesController)
 router.get('/movie/upcoming', getUpcomingMoviesController)
-router.get('/movie/:id', getMovieDetailController)
 
 // tv shows
 router.get('/tv/trending', getTrendingTvController)
@@ -28,6 +27,9 @@ router.get('/tv/popular', getPopularTvController)
 router.get('/tv/top-rated', getTopRatedTvController)
 router.get('/tv/airing-today', getAiringTodayTvController)
 router.get('/tv/on-the-air', getOnTheAirTvController)
-router.get('/tv/:id', getTvDetailController)
+
+// shared
+router.get('/:type/:id', getDetailsController)
+router.get('/:type/:id/similar', getSimilarController)
 
 export default router

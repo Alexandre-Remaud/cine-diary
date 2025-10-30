@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { TmdbMovie, TmdbTvShow } from '@shared/types/tmdb.d.ts'
+import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
 
 const TMDB_BASE = 'https://api.themoviedb.org/3'
 const API_KEY = process.env.TMDB_API_KEY
@@ -36,11 +36,6 @@ export const getNowPlayingMovies = async (): Promise<TmdbMovie[]> => {
   return data.results
 }
 
-export const getMovieDetail = async (id: number): Promise<TmdbMovie> => {
-  const { data } = await tmdbApi.get(`/movie/${id}`)
-  return data
-}
-
 export const getTrendingTv = async (): Promise<TmdbTvShow[]> => {
   const { data } = await tmdbApi.get('/trending/tv/week')
   return data.results
@@ -66,8 +61,12 @@ export const getTopRatedTv = async (): Promise<TmdbTvShow[]> => {
   return data.results
 }
 
-
-export const getTvDetail = async (id: number): Promise<TmdbTvShow> => {
-  const { data } = await tmdbApi.get(`/tv/${id}`)
+export const getDetails = async (id: number, type: string): Promise<TmdbMedia> => {
+  const { data } = await tmdbApi.get(`/${type}/${id}`)
   return data
+}
+
+export const getSimilar = async (id: number, type: string): Promise<TmdbMedia[]> => {
+  const { data } = await tmdbApi.get(`/${type}/${id}/similar`)
+  return data.results
 }

@@ -37,12 +37,12 @@ const routes = [
     component: () => import('@/views/ForbiddenView.vue'),
   },
   {
-    path: '/media/:id',
+    path: '/:type/:id',
     name: 'MediaDetail',
     component: () => import('@/views/MediaView.vue'),
     props: (route: MediaDetailRoute) => ({
       id: Number(route.params.id),
-      type: route.query.type
+      type: route.params.type
     })
   },
   {

@@ -16,7 +16,8 @@ export const useTmdbStore = defineStore('tmdb', {
       airingTodayTv: [],
       onTheAirTv: [],
       popularTv: [],
-      topRatedTv: []
+      topRatedTv: [],
+      similar: []
     } as TmdbRails,
     loading: false,
     error: null as string | null,
@@ -121,8 +122,12 @@ export const useTmdbStore = defineStore('tmdb', {
       this.loadingDetail = true
       this.error = null
       try {
-        const res = await api.get<TmdbMedia>(`/tmdb/${type}/${id}`)
-        this.currentMedia = res.data
+        const res = await Promise.all([
+          api.get<TmdbMedia>(`/tmdb/${type}/${id}`),
+          api.get<TmdbMedia>(`/tmdb/${type}/${id}/similar`)
+        ])
+        this.currentMedia = res[0].data
+        this.rails.similar = res[1].data
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>
         this.error = error.response?.data?.message || 'Erreur lors du chargement du média'
@@ -160,5 +165,11 @@ export const useTmdbStore = defineStore('tmdb', {
         {title: 'Séries populaires', items: this.rails.popularTv, icon: FlameIcon},
       ]
     },
+
+    similarRail(): Pick<TmdbRails, 'similar'> {
+      return [
+        {title: 'Similaire', items: this.rails.similar}
+      ]
+    }
   }
 })

@@ -1,6 +1,5 @@
 import type { RouteLocationNormalized } from 'vue-router'
 
 export interface MediaDetailRoute extends RouteLocationNormalized {
-  params: { id: string }
-  query: { type?: string }
+  params: {id: string, type: string}
 }
