@@ -15,8 +15,8 @@ onMounted(async () => {
 <template>
   <div class="w-full space-y-8 py-8">
     <Rail
-      v-for="(rail, index) in tvShowRails"
-      :key="index"
+      v-for="(rail) in tvShowRails"
+      :key="rail.title"
       :title="rail.title"
       :items="rail.items"
       :loading="loading"

@@ -12,5 +12,6 @@ export {
   Popcorn as PopcornIcon,
   TrendingUp as TrendingUpIcon,
   CalendarDays as CalendarDaysIcon,
-  Flame as FlameIcon
+  Flame as FlameIcon,
+  Sparkle as SparkleIcon
 } from 'lucide-vue-next'

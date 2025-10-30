@@ -8,7 +8,7 @@ import Rail from '@/components/TmdbRail.vue'
 
 const route = useRoute()
 const tmdbStore = useTmdbStore()
-const { similarRail, loading, error } = storeToRefs(tmdbStore)
+const { similarRail, loadingSimilar, error } = storeToRefs(tmdbStore)
 const mediaId = Number(route.params.id)
 const mediaType = route.params.type as 'movie' | 'tv'
 
@@ -21,13 +21,13 @@ onMounted(async () => {
   <div class="flex flex-1 flex-col items-center justify-center">
     <MediaDetail :media="tmdbStore.currentMedia" :loading="tmdbStore.loadingDetail" />
   </div>
-  <div class="w-full space-y-8 py-8">
+  <div class="w-full space-y-8 py-8" v-if="similarRail.length">
     <Rail
-      v-for="(rail, index) in similarRail"
-      :key="index"
+      v-for="(rail) in similarRail"
+      :key="rail.title"
       :title="rail.title"
       :items="rail.items"
-      :loading="loading"
+      :loading="loadingSimilar"
       :error="error"
       :icon="rail.icon"
     />

@@ -2,9 +2,17 @@ import { defineStore } from 'pinia'
 import api from '@/plugins/axios'
 import type { AxiosError } from 'axios'
 import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
-import type { TmdbRails } from '@/types/Tmdb.ts'
-import { TrendingUpIcon, StarIcon, ClockIcon, CalendarIcon, CalendarDaysIcon, PopcornIcon, FlameIcon } from '@/icons/icons'
-
+import type { TmdbRails, RailConfig } from '@/types/Tmdb.ts'
+import {
+  TrendingUp,
+  Star,
+  Clock,
+  Calendar,
+  CalendarDays,
+  Popcorn,
+  Flame,
+  Sparkles
+} from 'lucide-vue-next'
 export const useTmdbStore = defineStore('tmdb', {
   state: () => ({
     rails: {
@@ -23,6 +31,7 @@ export const useTmdbStore = defineStore('tmdb', {
     error: null as string | null,
     currentMedia: null as TmdbMedia | null,
     loadingDetail: false,
+    loadingSimilar: false,
   }),
 
   actions: {
@@ -61,6 +70,16 @@ export const useTmdbStore = defineStore('tmdb', {
     async _fetchPopularTv() {
       const res = await api.get<TmdbTvShow[]>('/tmdb/tv/popular')
       this.rails.popularTv = res.data
+    },
+    async _fetchSimilar(id: number, type: 'movie' | 'tv') {
+      this.loadingSimilar = true
+      try {
+        const res = await api.get<TmdbMedia[]>(`/tmdb/${type}/${id}/similar`)
+        this.rails.similar = res.data
+        return res
+      } finally {
+        this.loadingSimilar = false
+      }
     },
 
     async loadHomeRails() {
@@ -122,12 +141,11 @@ export const useTmdbStore = defineStore('tmdb', {
       this.loadingDetail = true
       this.error = null
       try {
-        const res = await Promise.all([
+        const [detailRes] = await Promise.all([
           api.get<TmdbMedia>(`/tmdb/${type}/${id}`),
-          api.get<TmdbMedia>(`/tmdb/${type}/${id}/similar`)
+          this._fetchSimilar(id, type)
         ])
-        this.currentMedia = res[0].data
-        this.rails.similar = res[1].data
+        this.currentMedia = detailRes.data
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>
         this.error = error.response?.data?.message || 'Erreur lors du chargement du média'
@@ -138,38 +156,38 @@ export const useTmdbStore = defineStore('tmdb', {
   },
 
   getters: {
-    homeRails(): Pick<TmdbRails, 'trendingMovies' | 'trendingTv' | 'topRatedMovies' | 'upcomingMovies'> {
+    homeRails(): RailConfig[] {
       return [
-        {title: 'Films tendances', items: this.rails.trendingMovies, icon: TrendingUpIcon},
-        {title: 'Séries tendances', items: this.rails.trendingTv, icon: TrendingUpIcon},
-        {title: 'Films les mieux notés', items: this.rails.topRatedMovies, icon: StarIcon},
-        {title: 'Film à venir', items: this.rails.upcomingMovies, icon: CalendarIcon},
+        {title: 'Films tendances', items: this.rails.trendingMovies, icon: TrendingUp},
+        {title: 'Séries tendances', items: this.rails.trendingTv, icon: TrendingUp},
+        {title: 'Films les mieux notés', items: this.rails.topRatedMovies, icon: Star},
+        {title: 'Film à venir', items: this.rails.upcomingMovies, icon: Calendar},
       ]
     },
 
-    movieRails(): Pick<TmdbRails, 'trendingMovies' | 'topRatedMovies' | 'upcomingMovies' | 'nowPlayingMovies'> {
+    movieRails(): RailConfig[] {
       return [
-        {title: 'Films tendances', items: this.rails.trendingMovies, icon: TrendingUpIcon},
-        {title: 'Films les mieux notés', items: this.rails.topRatedMovies, icon: StarIcon},
-        {title: 'Films à venir', items: this.rails.upcomingMovies, icon: ClockIcon},
-        {title: 'Films au cinéma', items: this.rails.nowPlayingMovies, icon: PopcornIcon},
+        {title: 'Films tendances', items: this.rails.trendingMovies, icon: TrendingUp},
+        {title: 'Films les mieux notés', items: this.rails.topRatedMovies, icon: Star},
+        {title: 'Films à venir', items: this.rails.upcomingMovies, icon: Clock},
+        {title: 'Films au cinéma', items: this.rails.nowPlayingMovies, icon: Popcorn},
       ]
     },
 
-    tvShowRails(): Pick<TmdbRails, 'trendingTv' | 'topRatedTv' | 'airingTodayTv' | 'onTheAirTv' | 'popularTv'> {
+    tvShowRails(): RailConfig[] {
       return [
-        {title: 'Séries tendances', items: this.rails.trendingTv, icon: TrendingUpIcon},
-        {title: 'Séries les mieux notés', items: this.rails.topRatedTv, icon: StarIcon},
-        {title: 'Diffusé aujourd"hui', items: this.rails.airingTodayTv, icon: CalendarIcon},
-        {title: 'Diffusé cette semaine', items: this.rails.onTheAirTv, icon: CalendarDaysIcon},
-        {title: 'Séries populaires', items: this.rails.popularTv, icon: FlameIcon},
+        {title: 'Séries tendances', items: this.rails.trendingTv, icon: TrendingUp},
+        {title: 'Séries les mieux notés', items: this.rails.topRatedTv, icon: Star},
+        {title: 'Diffusé aujourd"hui', items: this.rails.airingTodayTv, icon: Calendar},
+        {title: 'Diffusé cette semaine', items: this.rails.onTheAirTv, icon: CalendarDays},
+        {title: 'Séries populaires', items: this.rails.popularTv, icon: Flame},
       ]
     },
 
-    similarRail(): Pick<TmdbRails, 'similar'> {
-      return [
-        {title: 'Similaire', items: this.rails.similar}
-      ]
+    similarRail(): RailConfig[] {
+      return this.rails.similar.length > 0
+      ? [{ title: 'Similaires', items: this.rails.similar, icon: Sparkles }]
+      : []
     }
   }
 })

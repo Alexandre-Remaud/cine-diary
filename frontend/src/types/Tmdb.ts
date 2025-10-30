@@ -1,4 +1,5 @@
 import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
+import type { Component } from 'vue'
 
 export interface TmdbRails {
   trendingMovies: TmdbMovie[]
@@ -9,6 +10,12 @@ export interface TmdbRails {
   airingTodayTv: TmdbTvShow[]
   onTheAirTv: TmdbTvShow[]
   popularTv: TmdbTvShow[]
-  topRatedTv: TmdbTvShow[],
+  topRatedTv: TmdbTvShow[]
   similar: TmdbMedia[]
+}
+
+export interface RailConfig {
+  title: string
+  items: TmdbMedia[]
+  icon?: Component
 }
