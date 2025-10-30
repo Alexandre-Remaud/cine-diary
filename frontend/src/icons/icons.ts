@@ -8,5 +8,9 @@ export {
   Tv as TvIcon,
   Star as StarIcon,
   Calendar as CalendarIcon,
-  Popcorn as PopcornIcon
+  Clock as ClockIcon,
+  Popcorn as PopcornIcon,
+  TrendingUp as TrendingUpIcon,
+  CalendarDays as CalendarDaysIcon,
+  Flame as FlameIcon
 } from 'lucide-vue-next'

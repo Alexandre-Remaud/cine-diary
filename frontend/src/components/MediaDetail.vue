@@ -25,6 +25,15 @@ const isMovie = (m: TmdbMedia): m is TmdbMovie => 'title' in m
           {{ isMovie(media) ? media.release_date.split('-')[0] : media.first_air_date.split('-')[0] }}
           • {{ media.vote_average.toFixed(1) }} / 10
         </p>
+        <div class="inline-flex flex-wrap gap-2 mt-2">
+            <span
+              v-for="genre in media.genres"
+              :key="genre.id"
+              class="px-3 py-1 text-xs font-medium text-white bg-blue-600/20 rounded-full"
+            >
+              {{ genre.name }}
+            </span>
+          </div>
         <p class="mt-4 italic">{{ media.tagline }}</p>
         <p class="mt-4">{{ media.overview }}</p>
 

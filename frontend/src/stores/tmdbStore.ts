@@ -3,7 +3,7 @@ import api from '@/plugins/axios'
 import type { AxiosError } from 'axios'
 import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
 import type { TmdbRails } from '@/types/Tmdb.ts'
-import { FilmIcon, StarIcon, TvIcon, CalendarIcon, PopcornIcon } from '@/icons/icons'
+import { TrendingUpIcon, StarIcon, ClockIcon, CalendarIcon, CalendarDaysIcon, PopcornIcon, FlameIcon } from '@/icons/icons'
 
 export const useTmdbStore = defineStore('tmdb', {
   state: () => ({
@@ -135,8 +135,8 @@ export const useTmdbStore = defineStore('tmdb', {
   getters: {
     homeRails(): Pick<TmdbRails, 'trendingMovies' | 'trendingTv' | 'topRatedMovies' | 'upcomingMovies'> {
       return [
-        {title: 'Films tendances', items: this.rails.trendingMovies, icon: FilmIcon },
-        {title: 'Séries tendances', items: this.rails.trendingTv, icon: TvIcon},
+        {title: 'Films tendances', items: this.rails.trendingMovies, icon: TrendingUpIcon},
+        {title: 'Séries tendances', items: this.rails.trendingTv, icon: TrendingUpIcon},
         {title: 'Films les mieux notés', items: this.rails.topRatedMovies, icon: StarIcon},
         {title: 'Film à venir', items: this.rails.upcomingMovies, icon: CalendarIcon},
       ]
@@ -144,20 +144,20 @@ export const useTmdbStore = defineStore('tmdb', {
 
     movieRails(): Pick<TmdbRails, 'trendingMovies' | 'topRatedMovies' | 'upcomingMovies' | 'nowPlayingMovies'> {
       return [
-        {title: 'Films tendances', items: this.rails.trendingMovies, icon: FilmIcon},
+        {title: 'Films tendances', items: this.rails.trendingMovies, icon: TrendingUpIcon},
         {title: 'Films les mieux notés', items: this.rails.topRatedMovies, icon: StarIcon},
-        {title: 'Films à venir', items: this.rails.upcomingMovies, icon: CalendarIcon},
-        {title: 'Films au cinéma', items: this.rails.nowPlayingMovies, icon: PopcornIcon },
+        {title: 'Films à venir', items: this.rails.upcomingMovies, icon: ClockIcon},
+        {title: 'Films au cinéma', items: this.rails.nowPlayingMovies, icon: PopcornIcon},
       ]
     },
 
     tvShowRails(): Pick<TmdbRails, 'trendingTv' | 'topRatedTv' | 'airingTodayTv' | 'onTheAirTv' | 'popularTv'> {
       return [
-        {title: 'Séries tendances', items: this.rails.trendingTv, icon: FilmIcon},
+        {title: 'Séries tendances', items: this.rails.trendingTv, icon: TrendingUpIcon},
         {title: 'Séries les mieux notés', items: this.rails.topRatedTv, icon: StarIcon},
         {title: 'Diffusé aujourd"hui', items: this.rails.airingTodayTv, icon: CalendarIcon},
-        {title: 'Diffusé cette semaine', items: this.rails.onTheAirTv, icon: PopcornIcon },
-        {title: 'Séries populaires', items: this.rails.popularTv, icon: PopcornIcon },
+        {title: 'Diffusé cette semaine', items: this.rails.onTheAirTv, icon: CalendarDaysIcon},
+        {title: 'Séries populaires', items: this.rails.popularTv, icon: FlameIcon},
       ]
     },
   }
