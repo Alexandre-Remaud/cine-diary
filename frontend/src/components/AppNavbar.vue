@@ -3,7 +3,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { RouterLink } from 'vue-router'
 import NavbarLinks from '@/components/NavbarLinks.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import { FilmIcon, TvIcon } from '@/icons/icons'
+import { Film, Tv } from 'lucide-vue-next'
 
 const isOpen = ref(false)
 const menuRef = ref<HTMLElement | null>(null)
@@ -33,7 +33,7 @@ onBeforeUnmount(() => {
             to="/movies"
             type="button"
             variant="text"
-            :icon="FilmIcon"
+            :icon="Film"
           >
             Films
           </BaseButton>
@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
             to="/tvshow"
             type="button"
             variant="text"
-            :icon="TvIcon"
+            :icon="Tv"
           >
             Séries
           </BaseButton>

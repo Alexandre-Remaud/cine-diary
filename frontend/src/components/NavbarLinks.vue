@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useUiStore } from '@/stores/uiStore'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-import { UserIcon, LogOutIcon, LogInIcon } from '@/icons/icons'
+import { User, LogOut, LogIn } from 'lucide-vue-next'
 import BaseButton from '@/components/BaseButton.vue'
 
 const props = defineProps<{
@@ -40,7 +40,7 @@ const handleLinkClick = () => {
         to="/login"
         type="button"
         variant="text"
-        :icon="LogInIcon"
+        :icon="LogIn"
         @click="handleLinkClick"
       >
         Se connecter
@@ -52,7 +52,7 @@ const handleLinkClick = () => {
         to="/profile"
         type="button"
         variant="text"
-        :icon="UserIcon"
+        :icon="User"
         @click="handleLinkClick"
       >
         {{ authStore.user?.email }}
@@ -64,7 +64,7 @@ const handleLinkClick = () => {
         :loading="isLoading"
         ariaLabel="Se déconnecter"
         variant="danger"
-        :icon="LogOutIcon"
+        :icon="LogOut"
       >
         Déconnexion
       </BaseButton>

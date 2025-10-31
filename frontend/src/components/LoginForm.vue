@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router'
 import { validateEmail, validatePassword } from '@/utils/validation'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseInput from '@/components/BaseInput.vue'
-import { MailIcon, LockIcon } from '@/icons/icons'
+import { Mail, Lock } from 'lucide-vue-next'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -55,7 +55,7 @@ const handleForm = async () => {
       type="email"
       v-model="email"
       placeholder="Entrez votre email"
-      :icon="MailIcon"
+      :icon="Mail"
       :error="errors.email"
       @blur="errors.email = validateEmail(email)"
     />
@@ -64,7 +64,7 @@ const handleForm = async () => {
       type="password"
       v-model="password"
       placeholder="Entrez votre mot de passe"
-      :icon="LockIcon"
+      :icon="Lock"
       :error="errors.password"
       @blur="errors.password = validatePassword(password)"
     />
