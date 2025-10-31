@@ -10,7 +10,9 @@ import {
   getPopularTv,
   getTopRatedTv,
   getDetails,
-  getSimilar
+  getSimilar,
+  getSeasonDetails,
+  getRecommendations
 } from '@services/tmdbService'
 
 interface DetailParams extends Request {
@@ -134,6 +136,19 @@ export const getPopularTvController = async (
   }
 }
 
+export const getSeasonDetailsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const season = await getSeasonDetails(req.params.id, req.params.seasonNumber)
+    return res.json(season)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const getDetailsController = async (
   req: DetailParams,
   res: Response,
@@ -165,6 +180,24 @@ export const getSimilarController = async (
   try {
     const similar = await getSimilar(id, type)
     return res.json(similar)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getRecommendationsController = async (
+  req: DetailParams,
+  res: Response,
+  next: NextFunction,
+) => {
+  const id = Number(req.params.id)
+  const type = req.params.type
+  if (isNaN(id)) {
+    return res.status(400).json({ message: 'ID invalide' })
+  }
+  try {
+    const recommendations = await getRecommendations(id, type)
+    return res.json(recommendations)
   } catch (err) {
     next(err)
   }

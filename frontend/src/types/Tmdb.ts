@@ -11,7 +11,7 @@ export interface TmdbRails {
   onTheAirTv: TmdbTvShow[]
   popularTv: TmdbTvShow[]
   topRatedTv: TmdbTvShow[]
-  similar: TmdbMedia[]
+  recommendations: TmdbMedia[]
 }
 
 export interface RailConfig {

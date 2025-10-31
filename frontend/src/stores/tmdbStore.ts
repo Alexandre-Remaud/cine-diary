@@ -25,13 +25,13 @@ export const useTmdbStore = defineStore('tmdb', {
       onTheAirTv: [],
       popularTv: [],
       topRatedTv: [],
-      similar: []
+      recommendations: []
     } as TmdbRails,
     loading: false,
     error: null as string | null,
     currentMedia: null as TmdbMedia | null,
     loadingDetail: false,
-    loadingSimilar: false,
+    loadingRecommendations: false,
   }),
 
   actions: {
@@ -71,14 +71,14 @@ export const useTmdbStore = defineStore('tmdb', {
       const res = await api.get<TmdbTvShow[]>('/tmdb/tv/popular')
       this.rails.popularTv = res.data
     },
-    async _fetchSimilar(id: number, type: 'movie' | 'tv') {
-      this.loadingSimilar = true
+    async _fetchRecommendations(id: number, type: 'movie' | 'tv') {
+      this.loadingRecommendations = true
       try {
-        const res = await api.get<TmdbMedia[]>(`/tmdb/${type}/${id}/similar`)
-        this.rails.similar = res.data
+        const res = await api.get<TmdbMedia[]>(`/tmdb/${type}/${id}/recommendations`)
+        this.rails.recommendations = res.data
         return res
       } finally {
-        this.loadingSimilar = false
+        this.loadingRecommendations = false
       }
     },
 
@@ -143,7 +143,7 @@ export const useTmdbStore = defineStore('tmdb', {
       try {
         const [detailRes] = await Promise.all([
           api.get<TmdbMedia>(`/tmdb/${type}/${id}`),
-          this._fetchSimilar(id, type)
+          this._fetchRecommendations(id, type)
         ])
         this.currentMedia = detailRes.data
       } catch (err) {
@@ -184,9 +184,9 @@ export const useTmdbStore = defineStore('tmdb', {
       ]
     },
 
-    similarRail(): RailConfig[] {
-      return this.rails.similar.length > 0
-      ? [{ title: 'Similaires', items: this.rails.similar, icon: Sparkles }]
+    recommendationsRail(): RailConfig[] {
+      return this.rails.recommendations.length > 0
+      ? [{ title: 'Recommandations', items: this.rails.recommendations, icon: Sparkles }]
       : []
     }
   }

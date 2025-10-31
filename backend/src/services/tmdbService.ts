@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { TmdbMovie, TmdbTvShow, TmdbMedia } from '@shared/types/tmdb.d.ts'
+import type { TmdbMovie, TmdbTvShow, TmdbMedia, TmdbTvSeason } from '@shared/types/tmdb.d.ts'
 
 const TMDB_BASE = 'https://api.themoviedb.org/3'
 const API_KEY = process.env.TMDB_API_KEY
@@ -69,4 +69,15 @@ export const getDetails = async (id: number, type: string): Promise<TmdbMedia> =
 export const getSimilar = async (id: number, type: string): Promise<TmdbMedia[]> => {
   const { data } = await tmdbApi.get(`/${type}/${id}/similar`)
   return data.results
+}
+
+export const getRecommendations = async (id: number, type: string): Promise<TmdbMedia[]> => {
+  const { data } = await tmdbApi.get(`/${type}/${id}/recommendations`)
+  return data.results
+}
+
+
+export const getSeasonDetails = async (id: string, seasonNumber: string): Promise<TmdbTvSeason> => {
+  const { data } = await tmdbApi.get(`/tv/${id}/season/${seasonNumber}`)
+  return data
 }
